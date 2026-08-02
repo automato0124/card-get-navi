@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 420" role="img" aria-label="カードパックのプレースホルダー">
+  <rect width="320" height="420" rx="24" fill="#fff4f2"/>
+  <rect x="68" y="42" width="184" height="336" rx="18" fill="#ffffff" stroke="#e83f36" stroke-width="8"/>
+  <path d="M92 100h136M92 132h100" stroke="#2866c7" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="160" cy="220" r="62" fill="#ffd84d" stroke="#e83f36" stroke-width="8"/>
+  <path d="M160 168v104M108 220h104" stroke="#17223b" stroke-width="10" stroke-linecap="round"/>
+  <text x="160" y="334" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#17223b">SAMPLE</text>
+</svg>
