@@ -14,11 +14,11 @@ const methodLabel = {
   line: "LINE"
 };
 
-function ctaLabel(lottery: LotteryWithRelations) {
+function ctaLabel(lottery: LotteryWithRelations, openLabel = "応募する") {
   if (!lottery.officialApplicationUrl) return "詳細確認中";
   if (lottery.computedStatus === "upcoming") return "応募条件を確認する";
   if (lottery.computedStatus === "ended") return "受付終了";
-  return "応募する";
+  return openLabel;
 }
 
 function isRecommendedShop(lottery: LotteryWithRelations) {
@@ -28,11 +28,13 @@ function isRecommendedShop(lottery: LotteryWithRelations) {
 export function LotteryCard({
   lottery,
   compact = false,
-  titleBy = "product"
+  titleBy = "product",
+  openCtaLabel = "応募する"
 }: {
   lottery: LotteryWithRelations;
   compact?: boolean;
   titleBy?: "product" | "shop";
+  openCtaLabel?: string;
 }) {
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
@@ -107,7 +109,7 @@ export function LotteryCard({
                 : "border-2 border-ink bg-accent-yellow text-ink shadow-[3px_3px_0_#2866c7] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#2866c7]"
             )}
           >
-            {ctaLabel(lottery)}
+            {ctaLabel(lottery, openCtaLabel)}
             {!disabled ? <ExternalLink className="h-3.5 w-3.5" aria-hidden /> : null}
           </a>
         </div>
