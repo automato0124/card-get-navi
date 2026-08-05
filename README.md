@@ -26,8 +26,6 @@
 - `MICROCMS_SERVICE_DOMAIN`
 - `MICROCMS_API_KEY`
 - `MICROCMS_*_ENDPOINT`
-- `ADMIN_EMAIL`
-- `ADMIN_PASSWORD`
 
 本番ドメインは `https://card-get-navi.com` です。`NEXT_PUBLIC_SITE_URL` にはこのURLを設定します。
 
@@ -80,7 +78,7 @@ pnpm build
 - `/products/[slug]`: 商品別
 - `/shops`、`/shops/[slug]`: 店舗一覧・店舗別
 - `/calendar`: 月別締切・開始・発売カレンダー
-- `/admin`: 管理画面
+- `/admin`: ローカル確認用の管理画面
 - `/contact`
 
 ## CSV 項目

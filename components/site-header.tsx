@@ -35,17 +35,24 @@ export function SiteHeader() {
         </nav>
         <button
           type="button"
-          className="grid h-10 w-10 place-items-center rounded-full border border-line md:hidden"
+          className="relative grid h-12 w-12 place-items-center rounded-full border-2 border-line bg-white transition hover:bg-brand-50 md:hidden"
           aria-label="メニュー"
+          aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
         >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <Menu className={`absolute h-6 w-6 transition duration-200 ${open ? "rotate-90 scale-75 opacity-0" : "rotate-0 scale-100 opacity-100"}`} />
+          <X className={`absolute h-6 w-6 transition duration-200 ${open ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"}`} />
         </button>
       </div>
-      {open ? (
-        <nav className="container grid gap-2 pb-4 text-sm font-medium md:hidden" aria-label="モバイル">
+      <div className={`overflow-hidden transition-all duration-300 ease-out md:hidden ${open ? "max-h-72 opacity-100" : "max-h-0 opacity-0"}`}>
+        <nav className={`container grid gap-3 pb-5 pt-1 text-base font-black transition duration-300 ${open ? "translate-y-0" : "-translate-y-2"}`} aria-label="モバイル">
           {nav.map(([label, href]) => (
-            <Link key={href} href={href} className="rounded-full px-3 py-2 hover:bg-brand-50" onClick={() => setOpen(false)}>
+            <Link
+              key={href}
+              href={href}
+              className="rounded-2xl border border-line bg-white px-4 py-4 hover:bg-brand-50"
+              onClick={() => setOpen(false)}
+            >
               {label}
             </Link>
           ))}
@@ -54,12 +61,12 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Xを開く"
-            className="grid h-10 w-10 place-items-center rounded-full border border-line hover:bg-brand-50"
+            className="grid h-12 w-12 place-items-center rounded-full border border-line hover:bg-brand-50"
           >
-            <XIcon className="h-4 w-4" />
+            <XIcon className="h-5 w-5" />
           </a>
         </nav>
-      ) : null}
+      </div>
     </header>
   );
 }
