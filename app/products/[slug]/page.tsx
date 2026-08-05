@@ -40,7 +40,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return createMetadata({
     title: `${product.name}の抽選・予約・再販情報一覧`,
     description: product.seoDescription || `${product.name}の受付中の抽選・予約販売・再販情報を締切順に掲載。応募条件、締切日時、公式応募ページをまとめて確認できます。`,
-    path: `/products/${product.slug}`
+    path: `/products/${product.slug}`,
+    imageUrl: product.imageUrl,
+    imageAlt: product.name
   });
 }
 
