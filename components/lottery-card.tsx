@@ -33,6 +33,10 @@ function hasUnknownDeadline(lottery: LotteryWithRelations) {
   return Number.isFinite(year) && year >= 2090;
 }
 
+function deadlineLabel(lottery: LotteryWithRelations) {
+  return hasUnknownDeadline(lottery) ? "調査中" : formatTokyo(lottery.endAt, "M/d HH:mm");
+}
+
 export function LotteryCard({
   lottery,
   compact = false,
@@ -113,10 +117,10 @@ export function LotteryCard({
           <dl className="text-xs text-slate-700">
             <div className="px-1 py-1">
               <dt className="font-bold text-slate-500">締切</dt>
-              <dd className="mt-1 font-black text-[#e60012]">{unknownDeadline ? "-" : formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
+              <dd className="mt-1 font-black text-[#e60012]">{deadlineLabel(lottery)}</dd>
             </div>
           </dl>
-          <p className="px-1 text-sm font-black text-[#e60012]">{recommended ? "数量限定" : unknownDeadline ? "-" : remainingTimeLabel(lottery.endAt)}</p>
+          <p className="px-1 text-sm font-black text-[#e60012]">{recommended ? "数量限定" : unknownDeadline ? "調査中" : remainingTimeLabel(lottery.endAt)}</p>
           <a
             href={ctaDisabled ? undefined : ctaHref}
             aria-disabled={ctaDisabled}
