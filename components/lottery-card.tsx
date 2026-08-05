@@ -38,6 +38,18 @@ function deadlineLabel(lottery: LotteryWithRelations) {
   return hasUnknownDeadline(lottery) ? "調査中" : formatTokyo(lottery.endAt, "M/d HH:mm");
 }
 
+function applicationHref(lottery: LotteryWithRelations, href?: string) {
+  if (!href || !isRecommendedShop(lottery)) return href;
+  try {
+    const url = new URL(href);
+    url.searchParams.set("cg_product", lottery.product.slug);
+    url.searchParams.set("cg_shop", lottery.shop.slug);
+    return url.toString();
+  } catch {
+    return href;
+  }
+}
+
 export function LotteryCard({
   lottery,
   compact = false,
@@ -58,9 +70,9 @@ export function LotteryCard({
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
   const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
-  const ctaHref = ctaHrefMode === "product" ? `/products/${lottery.product.slug}` : lottery.officialApplicationUrl;
   const ctaDisabled = ctaHrefMode === "application" && disabled;
   const recommended = isRecommendedShop(lottery);
+  const ctaHref = ctaHrefMode === "product" ? `/products/${lottery.product.slug}` : applicationHref(lottery, lottery.officialApplicationUrl);
   const imageUrl = lottery.product.imageUrl;
   const showImage = titleBy === "product" && Boolean(imageUrl);
   const showMeta = (titleBy === "product" && showShop) || showLocation;
