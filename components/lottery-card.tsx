@@ -22,7 +22,7 @@ function ctaLabel(lottery: LotteryWithRelations, openLabel = "応募する！") 
 }
 
 function isRecommendedShop(lottery: LotteryWithRelations) {
-  return lottery.shop.slug === "oripa-freaks";
+  return lottery.shop.slug === "oripa-freaks" || lottery.shop.slug === "amazon";
 }
 
 function hasUnknownDeadline(lottery: LotteryWithRelations) {
@@ -64,6 +64,7 @@ export function LotteryCard({
   const showImage = titleBy === "product" && Boolean(imageUrl);
   const showMeta = (titleBy === "product" && showShop) || showLocation;
   const unknownDeadline = hasUnknownDeadline(lottery);
+  const showDeadline = !recommended;
   return (
     <article
       className={cn(
@@ -94,11 +95,6 @@ export function LotteryCard({
               <Link href={titleHref} className="relative z-10 hover:text-brand-700">
                 {title}
               </Link>
-              {recommended ? (
-                <span className="relative z-10 ml-2 inline-flex align-middle rounded-full bg-[#e60012] px-2 py-0.5 text-[10px] font-black leading-none text-white">
-                  おすすめ！
-                </span>
-              ) : null}
             </h3>
             {showMeta ? (
               <p className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-slate-700">
@@ -114,12 +110,16 @@ export function LotteryCard({
           </div>
         </div>
         <div className="grid gap-3.5 border-l border-line pl-5 max-md:border-l-0 max-md:border-t max-md:pt-5 max-md:pl-0">
-          <dl className="text-xs text-slate-700">
-            <div className="px-1 py-1">
-              <dt className="font-bold text-slate-500">締切</dt>
-              <dd className="mt-1 font-black text-[#e60012]">{deadlineLabel(lottery)}</dd>
-            </div>
-          </dl>
+          {showDeadline ? (
+            <dl className="text-xs text-slate-700">
+              <div className="px-1 py-1">
+                <dt className="font-bold text-slate-500">締切</dt>
+                <dd className="mt-1 font-black text-[#e60012]">{deadlineLabel(lottery)}</dd>
+              </div>
+            </dl>
+          ) : (
+            <p className="px-1 text-sm font-black text-[#e60012]">おすすめ</p>
+          )}
           {!unknownDeadline ? <p className="px-1 text-sm font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p> : null}
           <a
             href={ctaDisabled ? undefined : ctaHref}
