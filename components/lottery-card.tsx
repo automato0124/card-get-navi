@@ -120,7 +120,7 @@ export function LotteryCard({
               <dd className="mt-1 font-black text-[#e60012]">{deadlineLabel(lottery)}</dd>
             </div>
           </dl>
-          <p className="px-1 text-sm font-black text-[#e60012]">{recommended ? "数量限定" : unknownDeadline ? "調査中" : remainingTimeLabel(lottery.endAt)}</p>
+          {!unknownDeadline ? <p className="px-1 text-sm font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p> : null}
           <a
             href={ctaDisabled ? undefined : ctaHref}
             aria-disabled={ctaDisabled}
