@@ -67,10 +67,12 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
       <nav className="text-sm text-slate-600" aria-label="パンくず">
         <Link href="/">トップ</Link> / <span>{product.name}</span>
       </nav>
-      <section className="grid gap-5 rounded-3xl border border-line bg-white p-5 shadow-sm md:grid-cols-[180px_1fr]">
-        <div className="mx-auto grid w-32 aspect-[4/5] place-items-center rounded-2xl bg-brand-50 md:w-full">
-          <Image src={product.imageUrl || "/placeholder-pack.svg"} alt="" width={180} height={225} className="h-full w-full object-contain p-4 md:p-5" />
-        </div>
+      <section className={product.imageUrl ? "grid gap-5 rounded-3xl border border-line bg-white p-5 shadow-sm md:grid-cols-[180px_1fr]" : "rounded-3xl border border-line bg-white p-5 shadow-sm"}>
+        {product.imageUrl ? (
+          <div className="mx-auto grid w-32 aspect-[4/5] place-items-center rounded-2xl md:w-full">
+            <Image src={product.imageUrl} alt="" width={180} height={225} className="h-full w-full object-contain p-4 md:p-5" />
+          </div>
+        ) : null}
         <div className="space-y-4">
           <h1 className="text-xl font-black leading-snug md:text-2xl">{product.name}</h1>
           <p className="leading-7 text-slate-700">{product.description}</p>

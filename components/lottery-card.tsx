@@ -40,7 +40,8 @@ export function LotteryCard({
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
   const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
   const recommended = titleBy === "shop" && isRecommendedShop(lottery);
-  const showImage = titleBy === "product";
+  const imageUrl = lottery.product.imageUrl;
+  const showImage = titleBy === "product" && Boolean(imageUrl);
   return (
     <article
       className={cn(
@@ -54,7 +55,7 @@ export function LotteryCard({
           {showImage ? (
             <div className="relative z-10 grid aspect-[4/5] place-items-center">
               <Image
-                src={lottery.product.imageUrl || "/placeholder-pack.svg"}
+                src={imageUrl!}
                 alt=""
                 width={96}
                 height={120}
