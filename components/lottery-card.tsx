@@ -37,7 +37,7 @@ export function LotteryCard({
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
   const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
-  const recommended = isRecommendedShop(lottery);
+  const recommended = titleBy === "shop" && isRecommendedShop(lottery);
   const showImage = titleBy === "product";
   return (
     <article
