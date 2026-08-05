@@ -66,7 +66,7 @@ export function LotteryCard({ lottery, compact = false }: { lottery: LotteryWith
           <dl className="grid grid-cols-[0.9fr_1.1fr] gap-3 text-xs text-slate-700">
             <div className="px-1 py-1">
               <dt className="font-bold text-slate-500">開始</dt>
-              <dd className="mt-1 font-bold">{formatTokyo(lottery.startAt, "M/d HH:mm")}</dd>
+              <dd className="mt-1 font-bold">{lottery.startAt ? formatTokyo(lottery.startAt, "M/d HH:mm") : "-"}</dd>
             </div>
             <div className="border-l-2 border-line px-3 py-1">
               <dt className="font-bold text-slate-500">締切</dt>
