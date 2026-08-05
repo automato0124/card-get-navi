@@ -86,12 +86,8 @@ export function LotteryCard({
           </div>
         </div>
         <div className="grid gap-3.5 border-l border-line pl-5 max-md:border-l-0 max-md:border-t max-md:pt-5 max-md:pl-0">
-          <dl className="grid grid-cols-[0.9fr_1.1fr] gap-3 text-xs text-slate-700">
+          <dl className="text-xs text-slate-700">
             <div className="px-1 py-1">
-              <dt className="font-bold text-slate-500">開始</dt>
-              <dd className="mt-1 font-bold">{lottery.startAt ? formatTokyo(lottery.startAt, "M/d HH:mm") : "-"}</dd>
-            </div>
-            <div className="border-l-2 border-line px-3 py-1">
               <dt className="font-bold text-slate-500">締切</dt>
               <dd className="mt-1 font-black text-[#e60012]">{formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
             </div>
