@@ -25,6 +25,13 @@ function isRecommendedShop(lottery: LotteryWithRelations) {
   return lottery.shop.slug === "oripa-freaks";
 }
 
+function hasUnknownDeadline(lottery: LotteryWithRelations) {
+  if (lottery.shop.slug === "amazon") return true;
+  if (!lottery.endAt) return true;
+  const year = Number(lottery.endAt.slice(0, 4));
+  return Number.isFinite(year) && year >= 2090;
+}
+
 export function LotteryCard({
   lottery,
   compact = false,
@@ -51,6 +58,7 @@ export function LotteryCard({
   const imageUrl = lottery.product.imageUrl;
   const showImage = titleBy === "product" && Boolean(imageUrl);
   const showMeta = (titleBy === "product" && showShop) || showLocation;
+  const unknownDeadline = hasUnknownDeadline(lottery);
   return (
     <article
       className={cn(
@@ -105,11 +113,11 @@ export function LotteryCard({
             <dl className="text-xs text-slate-700">
               <div className="px-1 py-1">
                 <dt className="font-bold text-slate-500">締切</dt>
-                <dd className="mt-1 font-black text-[#e60012]">{formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
+                <dd className="mt-1 font-black text-[#e60012]">{unknownDeadline ? "-" : formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
               </div>
             </dl>
           )}
-          <p className="px-1 text-sm font-black text-[#e60012]">{recommended ? "数量限定" : remainingTimeLabel(lottery.endAt)}</p>
+          <p className="px-1 text-sm font-black text-[#e60012]">{recommended ? "数量限定" : unknownDeadline ? "-" : remainingTimeLabel(lottery.endAt)}</p>
           <a
             href={ctaDisabled ? undefined : ctaHref}
             aria-disabled={ctaDisabled}
