@@ -42,14 +42,14 @@ export function LotteryCard({
     >
       <Link href={`/products/${lottery.product.slug}`} className="absolute inset-0 z-0" aria-label={`${lottery.product.name}の詳細を見る`} />
       <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_240px]">
-        <div className="grid min-w-0 grid-cols-[60px_1fr] items-center gap-3 sm:grid-cols-[72px_1fr] sm:gap-4">
-          <div className="relative z-10 grid aspect-[4/5] place-items-center rounded-2xl bg-brand-50">
+        <div className="grid min-w-0 grid-cols-[82px_1fr] items-center gap-3 sm:grid-cols-[96px_1fr] sm:gap-4">
+          <div className="relative z-10 grid aspect-[4/5] place-items-center">
             <Image
               src={lottery.product.imageUrl || "/placeholder-pack.svg"}
               alt=""
-              width={72}
-              height={90}
-              className="h-full w-full object-contain p-2.5"
+              width={96}
+              height={120}
+              className="h-full w-full object-contain"
             />
           </div>
           <div className="min-w-0 space-y-3">
