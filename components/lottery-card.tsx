@@ -21,8 +21,18 @@ function ctaLabel(lottery: LotteryWithRelations) {
   return "応募する";
 }
 
-export function LotteryCard({ lottery, compact = false }: { lottery: LotteryWithRelations; compact?: boolean }) {
+export function LotteryCard({
+  lottery,
+  compact = false,
+  titleBy = "product"
+}: {
+  lottery: LotteryWithRelations;
+  compact?: boolean;
+  titleBy?: "product" | "shop";
+}) {
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
+  const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
+  const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
   return (
     <article
       className={cn(
@@ -49,12 +59,12 @@ export function LotteryCard({ lottery, compact = false }: { lottery: LotteryWith
               <span className="rounded-full border border-line bg-white px-2.5 py-1 text-[10px] font-bold text-slate-700">{methodLabel[lottery.applicationMethod]}</span>
             </div>
             <h3 className="break-words text-base font-black leading-snug text-ink sm:text-lg">
-              <Link href={`/products/${lottery.product.slug}`} className="relative z-10 hover:text-brand-700">
-                {lottery.product.name}
+              <Link href={titleHref} className="relative z-10 hover:text-brand-700">
+                {title}
               </Link>
             </h3>
             <p className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-slate-700">
-              <span>{lottery.shop.name}</span>
+              {titleBy === "product" ? <span>{lottery.shop.name}</span> : null}
               <span className="inline-flex items-center gap-1 text-slate-600">
                 <MapPin className="h-3.5 w-3.5" aria-hidden />
                 {lottery.prefecture}

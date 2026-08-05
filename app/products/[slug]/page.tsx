@@ -14,6 +14,12 @@ function paramValue(params: Record<string, string | string[] | undefined>, key: 
   return Array.isArray(value) ? value[0] : value;
 }
 
+function productPageLotteryOrder(a: { shop: { slug: string }; endAt?: string }, b: { shop: { slug: string }; endAt?: string }) {
+  if (a.shop.slug === "oripa-freaks" && b.shop.slug !== "oripa-freaks") return -1;
+  if (b.shop.slug === "oripa-freaks" && a.shop.slug !== "oripa-freaks") return 1;
+  return (a.endAt || "").localeCompare(b.endAt || "");
+}
+
 export async function generateStaticParams() {
   const products = await getProducts();
   return products.map((product) => ({ slug: product.slug }));
@@ -40,11 +46,13 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
   const lotteries = allLotteries.filter((lottery) => lottery.product.slug === slug);
   const selectedShop = paramValue(query, "shop");
   const selectedPrefecture = paramValue(query, "prefecture");
-  const filteredLotteries = lotteries.filter((lottery) => {
-    if (selectedShop && lottery.shop.slug !== selectedShop) return false;
-    if (selectedPrefecture && lottery.prefecture !== selectedPrefecture && lottery.area !== selectedPrefecture) return false;
-    return true;
-  });
+  const filteredLotteries = lotteries
+    .filter((lottery) => {
+      if (selectedShop && lottery.shop.slug !== selectedShop) return false;
+      if (selectedPrefecture && lottery.prefecture !== selectedPrefecture && lottery.area !== selectedPrefecture) return false;
+      return true;
+    })
+    .sort(productPageLotteryOrder);
   const filterShops = Array.from(new Map(lotteries.map((lottery) => [lottery.shop.slug, lottery.shop.name])).entries());
   const filterPrefectures = Array.from(
     new Map(lotteries.map((lottery) => [lottery.prefecture, lottery.prefecture])).entries()
@@ -72,15 +80,15 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
       <ProductLotteryFilters shops={filterShops} prefectures={filterPrefectures} />
       <section className="space-y-4">
         <h2 className="text-2xl font-black">受付中の抽選</h2>
-        <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
+        <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} titleBy="shop" />)}</div>
       </section>
       <section className="space-y-4">
         <h2 className="text-2xl font-black">近日開始の抽選</h2>
-        <div className="grid gap-4">{upcoming.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
+        <div className="grid gap-4">{upcoming.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} titleBy="shop" />)}</div>
       </section>
       <details className="rounded-3xl border border-line bg-white p-4">
         <summary className="cursor-pointer text-xl font-black">終了済みの抽選 {ended.length}件</summary>
-        <div className="mt-4 grid gap-4">{ended.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
+        <div className="mt-4 grid gap-4">{ended.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} titleBy="shop" />)}</div>
       </details>
       {related.length ? (
         <section className="space-y-3">
