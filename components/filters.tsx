@@ -2,9 +2,9 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import type { CardGame, LotteryWithRelations, Shop } from "@/lib/types";
+import type { LotteryWithRelations, Shop } from "@/lib/types";
 
-export function Filters({ cardGames, shops, lotteries }: { cardGames: CardGame[]; shops: Shop[]; lotteries: LotteryWithRelations[] }) {
+export function Filters({ shops, lotteries }: { shops: Shop[]; lotteries: LotteryWithRelations[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -61,7 +61,7 @@ export function Filters({ cardGames, shops, lotteries }: { cardGames: CardGame[]
         {statusButton("closing_soon", "締切近い", "border-red-800 bg-red-600 hover:bg-red-700", "border-red-950 bg-red-700")}
         {statusButton("upcoming", "近日開始", "border-blue-800 bg-blue-600 hover:bg-blue-700", "border-blue-950 bg-blue-700")}
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         {field("product", "ボックス", products.map((product) => [product.slug, product.name]))}
         {field("method", "抽選方式", [
           ["online", "オンライン"],

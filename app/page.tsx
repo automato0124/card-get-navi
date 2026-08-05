@@ -22,13 +22,11 @@ function valueOf(params: SearchParams, key: string) {
 
 function filterLotteries(lotteries: LotteryWithRelations[], params: SearchParams) {
   return lotteries.filter((lottery) => {
-    const game = valueOf(params, "game");
     const product = valueOf(params, "product");
     const status = valueOf(params, "status");
     const method = valueOf(params, "method");
     const shop = valueOf(params, "shop");
     return (
-      (!game || lottery.cardGame.slug === game) &&
       (!product || lottery.product.slug === product) &&
       (!status || lottery.computedStatus === status) &&
       (!method || lottery.applicationMethod === method) &&
@@ -48,7 +46,7 @@ function uniqueByProduct(lotteries: LotteryWithRelations[]) {
 
 export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;
-  const { cardGames, shops, lotteries: all } = await getPublicData();
+  const { shops, lotteries: all } = await getPublicData();
   const open = uniqueByProduct(all.filter((item) => ["open", "closing_soon"].includes(item.computedStatus)));
   const filtered = filterLotteries(all, params).sort((a, b) => {
     const aTime = a.endAt ? parseTokyoDate(a.endAt).getTime() : 0;
@@ -74,7 +72,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="container py-8">
         <section id="lotteries" className="space-y-5 scroll-mt-24 border-b border-line pb-8">
-          <Filters cardGames={cardGames} shops={shops} lotteries={all} />
+          <Filters shops={shops} lotteries={all} />
           <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
           <A8Banner />
           {visibleLotteries.length ? (

@@ -37,7 +37,7 @@ export function ProductLotteryFilters({
   );
 
   return (
-    <section id="lotteries" className="grid gap-4 scroll-mt-24 sm:max-w-sm" aria-label="商品別抽選フィルター">
+    <section id="lotteries" className="grid gap-4 scroll-mt-24 sm:max-w-md" aria-label="商品別抽選フィルター">
       {field("shop", "店舗", shops)}
     </section>
   );

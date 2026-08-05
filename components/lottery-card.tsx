@@ -75,7 +75,6 @@ export function LotteryCard({
           <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap items-center gap-1.5">
               <StatusBadge status={lottery.computedStatus} />
-              <span className="rounded-full border border-line bg-white px-2.5 py-1 text-[10px] font-bold text-slate-700">{lottery.cardGame.name}</span>
               <span className="rounded-full border border-line bg-white px-2.5 py-1 text-[10px] font-bold text-slate-700">{methodLabel[lottery.applicationMethod]}</span>
             </div>
             <h3 className="break-words text-base font-black leading-snug text-ink sm:text-lg">
