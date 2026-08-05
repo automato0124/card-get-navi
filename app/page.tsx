@@ -74,7 +74,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
             <div className="space-y-2">
               <div className="border-t border-line">
                 {visibleLotteries.map((lottery) => (
-                  <LotteryCard key={lottery.id} lottery={lottery} openCtaLabel="応募先を見る" ctaHrefMode="product" showLocation={false} />
+                  <LotteryCard key={lottery.id} lottery={lottery} openCtaLabel="応募先を見る" ctaHrefMode="product" showLocation={false} showShop={false} />
                 ))}
               </div>
             </div>
@@ -93,7 +93,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
               </summary>
               <div className="mt-4 grid gap-4">
                 {endedLotteries.map((lottery) => (
-                  <LotteryCard key={lottery.id} lottery={lottery} openCtaLabel="応募先を見る" ctaHrefMode="product" showLocation={false} />
+                  <LotteryCard key={lottery.id} lottery={lottery} openCtaLabel="応募先を見る" ctaHrefMode="product" showLocation={false} showShop={false} />
                 ))}
               </div>
             </details>

@@ -31,7 +31,8 @@ export function LotteryCard({
   titleBy = "product",
   openCtaLabel = "応募する",
   ctaHrefMode = "application",
-  showLocation = true
+  showLocation = true,
+  showShop = true
 }: {
   lottery: LotteryWithRelations;
   compact?: boolean;
@@ -39,6 +40,7 @@ export function LotteryCard({
   openCtaLabel?: string;
   ctaHrefMode?: "application" | "product";
   showLocation?: boolean;
+  showShop?: boolean;
 }) {
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
@@ -48,6 +50,7 @@ export function LotteryCard({
   const recommended = titleBy === "shop" && isRecommendedShop(lottery);
   const imageUrl = lottery.product.imageUrl;
   const showImage = titleBy === "product" && Boolean(imageUrl);
+  const showMeta = (titleBy === "product" && showShop) || showLocation;
   return (
     <article
       className={cn(
@@ -85,15 +88,17 @@ export function LotteryCard({
                 </span>
               ) : null}
             </h3>
-            <p className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-slate-700">
-              {titleBy === "product" ? <span>{lottery.shop.name}</span> : null}
-              {showLocation ? (
-                <span className="inline-flex items-center gap-1 text-slate-600">
-                  <MapPin className="h-3.5 w-3.5" aria-hidden />
-                  {lottery.prefecture}
-                </span>
-              ) : null}
-            </p>
+            {showMeta ? (
+              <p className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-slate-700">
+                {titleBy === "product" && showShop ? <span>{lottery.shop.name}</span> : null}
+                {showLocation ? (
+                  <span className="inline-flex items-center gap-1 text-slate-600">
+                    <MapPin className="h-3.5 w-3.5" aria-hidden />
+                    {lottery.prefecture}
+                  </span>
+                ) : null}
+              </p>
+            ) : null}
           </div>
         </div>
         <div className="grid gap-3.5 border-l border-line pl-5 max-md:border-l-0 max-md:border-t max-md:pt-5 max-md:pl-0">
@@ -103,7 +108,7 @@ export function LotteryCard({
               <dd className="mt-1 font-black text-[#e60012]">{formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
             </div>
           </dl>
-          {recommended ? null : <p className="px-1 text-sm font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p>}
+          <p className="px-1 text-base font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p>
           <a
             href={ctaDisabled ? undefined : ctaHref}
             aria-disabled={ctaDisabled}
