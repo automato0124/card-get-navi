@@ -90,12 +90,10 @@ export function LotteryCard({
             </div>
             <div className="border-l-2 border-line px-3 py-1">
               <dt className="font-bold text-slate-500">締切</dt>
-              <dd className="mt-1 font-black text-[#e60012]">{formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
+              <dd className="mt-1 font-black text-[#e60012]">{recommended ? "-" : formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
             </div>
           </dl>
-          <p className="px-1 text-sm font-black text-[#e60012]">
-            {remainingTimeLabel(lottery.endAt)}
-          </p>
+          {recommended ? null : <p className="px-1 text-sm font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p>}
           <a
             href={disabled ? undefined : lottery.officialApplicationUrl}
             aria-disabled={disabled}
