@@ -38,6 +38,7 @@ export function LotteryCard({
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
   const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
   const recommended = isRecommendedShop(lottery);
+  const showImage = titleBy === "product";
   return (
     <article
       className={cn(
@@ -47,16 +48,18 @@ export function LotteryCard({
     >
       <Link href={`/products/${lottery.product.slug}`} className="absolute inset-0 z-0" aria-label={`${lottery.product.name}の詳細を見る`} />
       <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_240px]">
-        <div className="grid min-w-0 grid-cols-[82px_1fr] items-center gap-3 sm:grid-cols-[96px_1fr] sm:gap-4">
-          <div className="relative z-10 grid aspect-[4/5] place-items-center">
-            <Image
-              src={lottery.product.imageUrl || "/placeholder-pack.svg"}
-              alt=""
-              width={96}
-              height={120}
-              className="h-full w-full object-contain"
-            />
-          </div>
+        <div className={cn("grid min-w-0 items-center gap-3 sm:gap-4", showImage ? "grid-cols-[82px_1fr] sm:grid-cols-[96px_1fr]" : "grid-cols-1")}>
+          {showImage ? (
+            <div className="relative z-10 grid aspect-[4/5] place-items-center">
+              <Image
+                src={lottery.product.imageUrl || "/placeholder-pack.svg"}
+                alt=""
+                width={96}
+                height={120}
+                className="h-full w-full object-contain"
+              />
+            </div>
+          ) : null}
           <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap items-center gap-1.5">
               <StatusBadge status={lottery.computedStatus} />
