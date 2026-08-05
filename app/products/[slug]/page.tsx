@@ -64,8 +64,8 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
       </nav>
       <section className={product.imageUrl ? "grid gap-5 rounded-3xl border border-line bg-white p-5 shadow-sm md:grid-cols-[180px_1fr]" : "rounded-3xl border border-line bg-white p-5 shadow-sm"}>
         {product.imageUrl ? (
-          <div className="mx-auto grid w-32 aspect-[4/5] place-items-center rounded-2xl md:w-full">
-            <Image src={product.imageUrl} alt="" width={180} height={225} className="h-full w-full object-contain p-4 md:p-5" />
+          <div className="mx-auto grid w-48 max-w-[70vw] aspect-[4/5] place-items-center rounded-2xl sm:w-56 md:w-full">
+            <Image src={product.imageUrl} alt="" width={224} height={280} className="h-full w-full object-contain p-2 sm:p-3 md:p-5" />
           </div>
         ) : null}
         <div className="space-y-4">
