@@ -52,6 +52,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div><dt className="font-bold text-slate-500">発売日</dt><dd>{formatTokyo(product.releaseDate, "yyyy/MM/dd")}</dd></div>
             <div><dt className="font-bold text-slate-500">希望小売価格</dt><dd>{formatPrice(product.retailPrice)}</dd></div>
           </dl>
+          <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
         </div>
       </section>
       <section className="space-y-4">

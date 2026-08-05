@@ -54,6 +54,152 @@
 
 microCMS のフィールドIDは20文字以内にします。応募URLは `officialApplicationUrl` ではなく、短い `applyUrl` を使ってください。URL系フィールド（`officialUrl`, `applyUrl`, `destinationUrl`, `trackingUrl` など）の入力値には文字数上限を設定しないでください。
 
+### 情報収集メタプロンプト
+
+POST APIで登録する前提の収集データは、次のプロンプトで作成します。
+
+```text
+あなたはポケモンカード抽選情報のリサーチャー兼データ整形担当です。
+
+目的:
+ポケモンカードの抽選販売・予約抽選・再販抽選情報を収集し、microCMSのPOST APIで登録しやすいJSON形式に整形してください。
+
+対象API:
+- products
+- shops
+- lotteries
+
+重要ルール:
+- 情報源は必ず公式サイト、公式アプリ告知、公式X、店舗公式ページ、信頼できる販売店ページのみ。
+- 不明な情報は推測しない。
+- 日時は必ず日本時間で `YYYY-MM-DDTHH:mm:ss+09:00` 形式にする。
+- 締切日時 `endAt` は特に正確に確認する。
+- `applicationMethod` は `online` または `store` のどちらかにする。
+- microCMS投入時、`applicationMethod` はセレクト型なので `["online"]` または `["store"]` に変換する。
+- `requirements` は配列で収集してよいが、microCMS投入時は改行区切り文字列に変換する。
+- 応募URL、アフィリエイトURLを貼る場合は `lotteries.applyUrl` に入れる。
+- `notes`, `sourceUrl`, `sourceType`, `prefecture`, `area`, `isOnline`, `priority` は収集メモとして出してよいが、現在のmicroCMS POST対象には含めない。
+- productやshopの重複を避けるため、必ずslugを安定した英数字・ハイフンで作る。
+- 画像URLは公式に掲載されている商品画像URLが取得できる場合のみ入れる。取れない場合は空文字にする。
+- 価格が不明なら `retailPrice` は `0` にする。
+- 終了済みの抽選も収集対象に含めるが、締切日時は必ず入れる。
+- URLはMarkdownリンクにせず、通常のURL文字列だけを入れる。
+- `utm_source=chatgpt.com` など調査由来のパラメータは付けない。
+
+出力形式:
+以下のJSONだけを返してください。説明文は不要です。
+
+{
+  "products": [
+    {
+      "name": "",
+      "slug": "",
+      "description": "",
+      "releaseDate": "",
+      "retailPrice": 0,
+      "imageUrl": "",
+      "officialUrl": "",
+      "seoDescription": "",
+      "isPublished": true
+    }
+  ],
+  "shops": [
+    {
+      "name": "",
+      "slug": "",
+      "description": "",
+      "officialUrl": "",
+      "officialXUrl": "",
+      "prefecture": "",
+      "area": "",
+      "isOnline": true,
+      "isActive": true
+    }
+  ],
+  "lotteries": [
+    {
+      "productSlug": "",
+      "shopSlug": "",
+      "title": "",
+      "applicationMethod": "online",
+      "startAt": "",
+      "endAt": "",
+      "applyUrl": "",
+      "requirements": [],
+      "notes": "",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "prefecture": "",
+      "area": "",
+      "isOnline": true,
+      "isFeatured": false,
+      "priority": 0,
+      "isPublished": true
+    }
+  ]
+}
+
+各項目の作り方:
+
+products:
+- name: 商品名を正式名称で入れる
+- slug: 商品名から英数字・ハイフンで作る
+- description: 商品そのものの説明。店舗名や抽選条件は入れない
+- releaseDate: 発売日。時刻不明なら `YYYY-MM-DDT00:00:00+09:00`
+- retailPrice: 税込定価。分からなければ0
+- imageUrl: 公式画像URL。なければ空文字
+- officialUrl: 商品公式ページ
+- seoDescription: 「商品名の抽選・予約・再販情報」向けの短い説明
+- isPublished: true
+
+shops:
+- name: 店舗名・サービス名
+- slug: 店舗名から英数字・ハイフンで作る
+- description: 短い店舗説明。不明なら空文字
+- officialUrl: 店舗公式サイト
+- officialXUrl: 公式X URL。なければ空文字
+- prefecture: オンライン全国対象なら「全国」。実店舗なら都道府県
+- area: 「全国」「関東」「関西」など
+- isOnline: オンライン応募ならtrue、店頭応募中心ならfalse
+- isActive: true
+
+lotteries:
+- productSlug: productsのslugと一致させる
+- shopSlug: shopsのslugと一致させる
+- title: 「商品名 店舗名 抽選販売」など分かりやすいタイトル
+- applicationMethod: online または store
+- startAt: 応募開始日時。未公表なら空文字
+- endAt: 応募締切日時。必須
+- applyUrl: 応募ページURL。アフィリエイトリンクを使う場合もここ
+- requirements: 応募条件を配列で入れる。例: ["会員登録", "アプリ応募", "購入履歴必要"]
+- notes: 補足メモ。現在のPOST対象には含めない
+- sourceUrl: 情報確認元URL。現在のPOST対象には含めない
+- sourceType: "official"
+- prefecture: 店舗と同じ
+- area: 店舗と同じ
+- isOnline: 応募がオンラインならtrue
+- isFeatured: 通常false
+- priority: 通常0
+- isPublished: true
+```
+
+### POST API一括操作
+
+収集したJSONは `scripts/microcms/data.json` に貼り付けます。
+
+```bash
+# 件数確認
+python3 scripts/microcms/microcms_bulk.py count
+
+# 一括登録
+python3 scripts/microcms/microcms_bulk.py insert
+
+# 一括削除
+python3 scripts/microcms/microcms_bulk.py delete --yes
+```
+
+スクリプトは標準ライブラリだけで動きます。詳細は `scripts/microcms/README.md` を参照してください。
+
 ## ローカル起動
 
 ```bash

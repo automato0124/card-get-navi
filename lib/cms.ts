@@ -1,6 +1,6 @@
 import { affiliateCampaigns as seedCampaigns, getLotteriesWithRelations as getSeedLotteriesWithRelations, products as seedProducts, shops as seedShops } from "./data";
 import { computeLotteryStatus } from "./time";
-import type { AffiliateCampaign, CardGame, LotteryWithRelations, Product, Shop } from "./types";
+import type { AffiliateCampaign, ApplicationMethod, CardGame, LotteryWithRelations, Product, Shop } from "./types";
 
 type MicroCmsList<T> = {
   contents: T[];
@@ -39,6 +39,16 @@ function refId(value: any) {
   if (!value) return undefined;
   if (typeof value === "string") return value;
   return value.id || value.slug || undefined;
+}
+
+function firstValue<T>(value: T | T[] | undefined): T | undefined {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function requirementsList(value: unknown) {
+  if (Array.isArray(value)) return value.filter(Boolean).map(String);
+  if (typeof value === "string") return value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+  return [];
 }
 
 async function fetchList<T>(endpoint: string, queries: Record<string, string | number> = {}): Promise<T[] | null> {
@@ -140,7 +150,7 @@ function toLotteryWithRelations(row: any, products: Product[], shops: Shop[], ca
     productId: product.id,
     shopId: shop.id,
     title: row.title,
-    applicationMethod: field(row, "applicationMethod", "application_method") || "online",
+    applicationMethod: firstValue(field(row, "applicationMethod", "application_method")) as ApplicationMethod || "online",
     startAt: field(row, "startAt", "start_at") || undefined,
     endAt: field(row, "endAt", "end_at") || undefined,
     resultAt: field(row, "resultAt", "result_at") || undefined,
@@ -153,7 +163,7 @@ function toLotteryWithRelations(row: any, products: Product[], shops: Shop[], ca
     prefecture: row.prefecture || shop.prefecture,
     area: row.area || shop.area,
     isOnline: field(row, "isOnline", "is_online") ?? shop.isOnline,
-    requirements: Array.isArray(row.requirements) ? row.requirements : [],
+    requirements: requirementsList(row.requirements),
     notes: row.notes || undefined,
     statusOverride: field(row, "statusOverride", "status_override") || null,
     isFeatured: field(row, "isFeatured", "is_featured") ?? false,
@@ -174,7 +184,8 @@ function isLotteryWithRelations(value: LotteryWithRelations | null): value is Lo
 export async function getCardGames(): Promise<CardGame[]> {
   if (!endpoints.cardGames) return [pokemonCardGame];
   const rows = await fetchList<any>(endpoints.cardGames, { orders: "displayOrder" });
-  return rows ? rows.map(toCardGame).filter((item) => item.isActive) : [pokemonCardGame];
+  const cardGames = rows?.map(toCardGame).filter((item) => item.isActive) || [];
+  return cardGames.length > 0 ? cardGames : [pokemonCardGame];
 }
 
 export async function getProducts(): Promise<Product[]> {
