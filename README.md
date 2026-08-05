@@ -56,13 +56,13 @@ microCMS のフィールドIDは20文字以内にします。応募URLは `offic
 
 ### 情報収集メタプロンプト
 
-POST APIで登録する前提の収集データは、次のプロンプトで作成します。
+POST APIで登録する前提の収集データは、次のプロンプトで作成します。出力されたJSONを `scripts/microcms/data.json` に貼り付けて、一括登録します。
 
 ```text
 あなたはポケモンカード抽選情報のリサーチャー兼データ整形担当です。
 
 目的:
-ポケモンカードの抽選販売・予約抽選・再販抽選情報を収集し、microCMSのPOST APIで登録しやすいJSON形式に整形してください。
+ポケモンカードの抽選販売・予約抽選・再販抽選情報を収集し、カードゲットナビのmicroCMS POST APIへそのまま投入できるJSON形式に整形してください。
 
 対象API:
 - products
@@ -72,17 +72,20 @@ POST APIで登録する前提の収集データは、次のプロンプトで作
 重要ルール:
 - 情報源は必ず公式サイト、公式アプリ告知、公式X、店舗公式ページ、信頼できる販売店ページのみ。
 - 不明な情報は推測しない。
-- 日時は必ず日本時間で `YYYY-MM-DDTHH:mm:ss+09:00` 形式にする。
+- 日時は必ず日本時間で `YYYY-MM-DDTHH:mm:ss+09:00` 形式にする。例: `2026-08-06T17:59:00+09:00`
 - 締切日時 `endAt` は特に正確に確認する。
-- `applicationMethod` は `online` または `store` のどちらかにする。
-- microCMS投入時、`applicationMethod` はセレクト型なので `["online"]` または `["store"]` に変換する。
+- `applicationMethod` は `online` または `store` のどちらかだけにする。
 - 応募URL、アフィリエイトURLを貼る場合は `lotteries.applyUrl` に入れる。
-- `releaseDate`, `retailPrice`, `requirements`, `notes`, `sourceUrl`, `sourceType`, `prefecture`, `area`, `isOnline`, `priority` は収集メモとして出してよいが、現在のmicroCMS POST対象には含めない。
+- `releaseDate`, `retailPrice`, `requirements`, `notes`, `sourceUrl`, `sourceType`, `isFeatured`, `priority` は出力しない。
 - productやshopの重複を避けるため、必ずslugを安定した英数字・ハイフンで作る。
 - 画像URLは公式に掲載されている商品画像URLが取得できる場合のみ入れる。取れない場合は空文字にする。
 - 終了済みの抽選も収集対象に含めるが、締切日時は必ず入れる。
 - URLはMarkdownリンクにせず、通常のURL文字列だけを入れる。
 - `utm_source=chatgpt.com` など調査由来のパラメータは付けない。
+- 同じ商品・同じ店舗は必ず1件にまとめる。
+- 店舗が複数商品を同時に抽選している場合、商品ごとにlotteriesを分ける。
+- 応募開始日時が未公表の場合のみ `startAt` は空文字にする。
+- 応募締切日時が不明な抽選はlotteriesに含めない。
 
 出力形式:
 以下のJSONだけを返してください。説明文は不要です。
@@ -121,14 +124,9 @@ POST APIで登録する前提の収集データは、次のプロンプトで作
       "startAt": "",
       "endAt": "",
       "applyUrl": "",
-      "notes": "",
-      "sourceUrl": "",
-      "sourceType": "official",
       "prefecture": "",
       "area": "",
       "isOnline": true,
-      "isFeatured": false,
-      "priority": 0,
       "isPublished": true
     }
   ]
@@ -140,7 +138,7 @@ products:
 - name: 商品名を正式名称で入れる
 - slug: 商品名から英数字・ハイフンで作る
 - description: 商品そのものの説明。店舗名や抽選条件は入れない
-- imageUrl: 公式画像URL。なければ空文字
+- imageUrl: 公式の商品画像URL。取得できなければ空文字
 - officialUrl: 商品公式ページ
 - seoDescription: 「商品名の抽選・予約・再販情報」向けの短い説明
 - isPublished: true
@@ -151,7 +149,7 @@ shops:
 - description: 短い店舗説明。不明なら空文字
 - officialUrl: 店舗公式サイト
 - officialXUrl: 公式X URL。なければ空文字
-- prefecture: オンライン全国対象なら「全国」。実店舗なら都道府県
+- prefecture: オンライン全国対象なら「全国」。実店舗抽選なら都道府県
 - area: 「全国」「関東」「関西」など
 - isOnline: オンライン応募ならtrue、店頭応募中心ならfalse
 - isActive: true
@@ -164,16 +162,18 @@ lotteries:
 - startAt: 応募開始日時。未公表なら空文字
 - endAt: 応募締切日時。必須
 - applyUrl: 応募ページURL。アフィリエイトリンクを使う場合もここ
-- requirements: 補足メモとして収集してよいが、現在のPOST対象には含めない
-- notes: 補足メモ。現在のPOST対象には含めない
-- sourceUrl: 情報確認元URL。現在のPOST対象には含めない
-- sourceType: "official"
-- prefecture: 店舗と同じ
-- area: 店舗と同じ
+- prefecture: 抽選対象エリア。全国対象なら「全国」
+- area: 抽選対象の広域エリア。全国対象なら「全国」
 - isOnline: 応募がオンラインならtrue
-- isFeatured: 通常false
-- priority: 通常0
 - isPublished: true
+
+品質チェック:
+- JSONとしてパースできること
+- productsのslugとlotteriesのproductSlugが一致していること
+- shopsのslugとlotteriesのshopSlugが一致していること
+- URLがMarkdown形式になっていないこと
+- endAtが空のlotteriesがないこと
+- applicationMethodがonline/store以外になっていないこと
 ```
 
 ### POST API一括操作

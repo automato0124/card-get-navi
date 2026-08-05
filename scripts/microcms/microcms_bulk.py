@@ -84,7 +84,12 @@ class MicroCmsClient:
         try:
             with urllib.request.urlopen(request) as response:
                 raw = response.read().decode("utf-8")
-                return json.loads(raw) if raw else {}
+                if not raw:
+                    return {}
+                try:
+                    return json.loads(raw)
+                except json.JSONDecodeError:
+                    return {"raw": raw}
         except urllib.error.HTTPError as error:
             raw = error.read().decode("utf-8")
             raise RuntimeError(f"{method} {endpoint_name} failed: {error.code} {raw}") from error
