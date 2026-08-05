@@ -21,6 +21,10 @@ function ctaLabel(lottery: LotteryWithRelations) {
   return "応募する";
 }
 
+function isRecommendedShop(lottery: LotteryWithRelations) {
+  return lottery.shop.slug === "oripa-freaks";
+}
+
 export function LotteryCard({
   lottery,
   compact = false,
@@ -33,6 +37,7 @@ export function LotteryCard({
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
   const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
+  const recommended = isRecommendedShop(lottery);
   return (
     <article
       className={cn(
@@ -62,6 +67,11 @@ export function LotteryCard({
               <Link href={titleHref} className="relative z-10 hover:text-brand-700">
                 {title}
               </Link>
+              {recommended ? (
+                <span className="relative z-10 ml-2 inline-flex align-middle rounded-full bg-[#e60012] px-2 py-0.5 text-[10px] font-black leading-none text-white">
+                  おすすめ！
+                </span>
+              ) : null}
             </h3>
             <p className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-slate-700">
               {titleBy === "product" ? <span>{lottery.shop.name}</span> : null}
