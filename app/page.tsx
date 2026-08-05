@@ -27,15 +27,13 @@ function filterLotteries(lotteries: LotteryWithRelations[], params: SearchParams
     const method = valueOf(params, "method");
     const shop = valueOf(params, "shop");
     const prefecture = valueOf(params, "prefecture");
-    const requirement = valueOf(params, "requirement");
     return (
       (!game || lottery.cardGame.slug === game) &&
       (!product || lottery.product.slug === product) &&
       (!status || lottery.computedStatus === status) &&
       (!method || lottery.applicationMethod === method) &&
       (!shop || lottery.shop.slug === shop) &&
-      (!prefecture || lottery.prefecture === prefecture) &&
-      (!requirement || lottery.requirements.includes(requirement))
+      (!prefecture || lottery.prefecture === prefecture)
     );
   });
 }

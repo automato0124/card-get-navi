@@ -7,9 +7,9 @@ import { formatTokyo, tokyoLocalInputToIso } from "@/lib/time";
 import type { Lottery } from "@/lib/types";
 
 function toCsv(rows: Lottery[]) {
-  const header = ["id", "title", "product_id", "shop_id", "application_method", "start_at", "end_at", "official_application_url", "requirements"];
+  const header = ["id", "title", "product_id", "shop_id", "application_method", "start_at", "end_at", "official_application_url"];
   const body = rows.map((row) =>
-    [row.id, row.title, row.productId, row.shopId, row.applicationMethod, row.startAt || "", row.endAt || "", row.officialApplicationUrl || "", row.requirements.join("|")]
+    [row.id, row.title, row.productId, row.shopId, row.applicationMethod, row.startAt || "", row.endAt || "", row.officialApplicationUrl || ""]
       .map((value) => `"${String(value).replaceAll('"', '""')}"`)
       .join(",")
   );
@@ -17,7 +17,7 @@ function toCsv(rows: Lottery[]) {
 }
 
 function tweetText(lottery: ReturnType<typeof getLotteriesWithRelations>[number]) {
-  return `【${lottery.computedStatus === "closing_soon" ? "本日締切" : "ポケカ抽選開始"}】\n\n${lottery.product.name}の抽選受付が${lottery.shop.name}で${lottery.computedStatus === "upcoming" ? "近日開始します" : "受付中です"}。\n\n締切：${formatTokyo(lottery.endAt)}\n応募方法：${lottery.applicationMethod}\n条件：${lottery.requirements.join("、") || "公式ページ確認"}\n\n詳細はこちら\n/products/${lottery.product.slug}`;
+  return `【${lottery.computedStatus === "closing_soon" ? "本日締切" : "ポケカ抽選開始"}】\n\n${lottery.product.name}の抽選受付が${lottery.shop.name}で${lottery.computedStatus === "upcoming" ? "近日開始します" : "受付中です"}。\n\n締切：${formatTokyo(lottery.endAt)}\n応募方法：${lottery.applicationMethod}\n\n応募前に公式ページで最新条件を確認してください。\n\n詳細はこちら\n/products/${lottery.product.slug}`;
 }
 
 export function AdminConsole() {

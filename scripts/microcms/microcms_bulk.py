@@ -113,8 +113,6 @@ def product_body(product):
         "name": product.get("name"),
         "slug": product.get("slug"),
         "description": product.get("description", ""),
-        "releaseDate": product.get("releaseDate"),
-        "retailPrice": product.get("retailPrice", 0),
         "imageUrl": clean_url(product.get("imageUrl")),
         "officialUrl": clean_url(product.get("officialUrl")),
         "seoDescription": product.get("seoDescription", ""),
@@ -137,10 +135,6 @@ def shop_body(shop):
 
 
 def lottery_body(lottery, product_id, shop_id):
-    requirements = lottery.get("requirements", [])
-    if isinstance(requirements, list):
-        requirements = "\n".join(str(item) for item in requirements if item)
-
     method = lottery.get("applicationMethod") or "online"
     if not isinstance(method, list):
         method = [method]
@@ -153,7 +147,6 @@ def lottery_body(lottery, product_id, shop_id):
         "startAt": lottery.get("startAt"),
         "endAt": lottery.get("endAt"),
         "applyUrl": clean_url(lottery.get("applyUrl")),
-        "requirements": requirements,
         "isPublished": lottery.get("isPublished", True),
     })
 

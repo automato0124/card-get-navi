@@ -42,9 +42,9 @@
 
 フィールドIDは camelCase 推奨です。既存の snake_case 名も一部読み取れるようにしています。
 
-- `products`: `name`, `slug`, `description`, `releaseDate`, `retailPrice`, `imageUrl`, `officialUrl`, `seoDescription`, `isPublished`
+- `products`: `name`, `slug`, `description`, `imageUrl`, `officialUrl`, `seoDescription`, `isPublished`
 - `shops`: `name`, `slug`, `description`, `officialUrl`, `officialXUrl`, `prefecture`, `area`, `isOnline`, `isActive`
-- `lotteries`: `product`（コンテンツ参照）, `shop`（コンテンツ参照）, `title`, `applicationMethod`, `startAt`, `endAt`, `applyUrl`, `requirements`, `isPublished`
+- `lotteries`: `product`（コンテンツ参照）, `shop`（コンテンツ参照）, `title`, `applicationMethod`, `startAt`, `endAt`, `applyUrl`, `isPublished`
 - `affiliate-campaigns`: `advertiserName`, `title`, `description`, `benefitText`, `destinationUrl`, `trackingUrl`, `trackingMode`, `startAt`, `endAt`, `priority`, `placement`, `ctaLabel`, `isActive`
 
 ポケカ特化の初期運用では `card-games` API は作りません。アプリ側で「ポケモンカード」を固定カテゴリとして扱います。
@@ -76,12 +76,10 @@ POST APIで登録する前提の収集データは、次のプロンプトで作
 - 締切日時 `endAt` は特に正確に確認する。
 - `applicationMethod` は `online` または `store` のどちらかにする。
 - microCMS投入時、`applicationMethod` はセレクト型なので `["online"]` または `["store"]` に変換する。
-- `requirements` は配列で収集してよいが、microCMS投入時は改行区切り文字列に変換する。
 - 応募URL、アフィリエイトURLを貼る場合は `lotteries.applyUrl` に入れる。
-- `notes`, `sourceUrl`, `sourceType`, `prefecture`, `area`, `isOnline`, `priority` は収集メモとして出してよいが、現在のmicroCMS POST対象には含めない。
+- `releaseDate`, `retailPrice`, `requirements`, `notes`, `sourceUrl`, `sourceType`, `prefecture`, `area`, `isOnline`, `priority` は収集メモとして出してよいが、現在のmicroCMS POST対象には含めない。
 - productやshopの重複を避けるため、必ずslugを安定した英数字・ハイフンで作る。
 - 画像URLは公式に掲載されている商品画像URLが取得できる場合のみ入れる。取れない場合は空文字にする。
-- 価格が不明なら `retailPrice` は `0` にする。
 - 終了済みの抽選も収集対象に含めるが、締切日時は必ず入れる。
 - URLはMarkdownリンクにせず、通常のURL文字列だけを入れる。
 - `utm_source=chatgpt.com` など調査由来のパラメータは付けない。
@@ -95,8 +93,6 @@ POST APIで登録する前提の収集データは、次のプロンプトで作
       "name": "",
       "slug": "",
       "description": "",
-      "releaseDate": "",
-      "retailPrice": 0,
       "imageUrl": "",
       "officialUrl": "",
       "seoDescription": "",
@@ -125,7 +121,6 @@ POST APIで登録する前提の収集データは、次のプロンプトで作
       "startAt": "",
       "endAt": "",
       "applyUrl": "",
-      "requirements": [],
       "notes": "",
       "sourceUrl": "",
       "sourceType": "official",
@@ -145,8 +140,6 @@ products:
 - name: 商品名を正式名称で入れる
 - slug: 商品名から英数字・ハイフンで作る
 - description: 商品そのものの説明。店舗名や抽選条件は入れない
-- releaseDate: 発売日。時刻不明なら `YYYY-MM-DDT00:00:00+09:00`
-- retailPrice: 税込定価。分からなければ0
 - imageUrl: 公式画像URL。なければ空文字
 - officialUrl: 商品公式ページ
 - seoDescription: 「商品名の抽選・予約・再販情報」向けの短い説明
@@ -171,7 +164,7 @@ lotteries:
 - startAt: 応募開始日時。未公表なら空文字
 - endAt: 応募締切日時。必須
 - applyUrl: 応募ページURL。アフィリエイトリンクを使う場合もここ
-- requirements: 応募条件を配列で入れる。例: ["会員登録", "アプリ応募", "購入履歴必要"]
+- requirements: 補足メモとして収集してよいが、現在のPOST対象には含めない
 - notes: 補足メモ。現在のPOST対象には含めない
 - sourceUrl: 情報確認元URL。現在のPOST対象には含めない
 - sourceType: "official"
@@ -229,7 +222,7 @@ pnpm build
 
 ## CSV 項目
 
-`id,title,product_id,shop_id,application_method,start_at,end_at,official_application_url,requirements`
+`id,title,product_id,shop_id,application_method,start_at,end_at,official_application_url`
 
 管理画面の CSV 出力ボタンで同形式を確認できます。インポート UI は枠を用意しており、本番運用では microCMS の管理画面またはCSVインポートを使います。
 

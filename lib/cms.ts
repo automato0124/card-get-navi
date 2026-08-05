@@ -189,7 +189,7 @@ export async function getCardGames(): Promise<CardGame[]> {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const rows = await fetchList<any>(endpoints.products, { orders: "releaseDate" });
+  const rows = await fetchList<any>(endpoints.products, { orders: "-updatedAt" });
   return rows
     ? rows.map(toProduct).filter((item) => item.isPublished)
     : seedProducts.filter((item) => item.cardGameId === pokemonCardGame.id);

@@ -60,13 +60,6 @@ export function LotteryCard({ lottery, compact = false }: { lottery: LotteryWith
                 {lottery.prefecture}
               </span>
             </p>
-            <div className="flex flex-wrap gap-2">
-              {lottery.requirements.map((tag) => (
-                <span key={tag} className="rounded-full border border-line bg-white px-2.5 py-0.5 text-[10px] font-semibold text-slate-700">
-                  {tag}
-                </span>
-              ))}
-            </div>
           </div>
         </div>
         <div className="grid gap-3.5 border-l border-line pl-5 max-md:border-l-0 max-md:border-t max-md:pt-5 max-md:pl-0">

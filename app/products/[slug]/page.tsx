@@ -3,10 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LotteryCard } from "@/components/lottery-card";
+import { ProductLotteryFilters } from "@/components/product-lottery-filters";
 import { getLotteriesWithRelations, getProducts } from "@/lib/cms";
 import { createMetadata } from "@/lib/seo";
-import { formatTokyo } from "@/lib/time";
-import { formatPrice } from "@/lib/utils";
+
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+function paramValue(params: Record<string, string | string[] | undefined>, key: string) {
+  const value = params[key];
+  return Array.isArray(value) ? value[0] : value;
+}
 
 export async function generateStaticParams() {
   const products = await getProducts();
@@ -25,15 +31,27 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProductPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: SearchParams }) {
   const { slug } = await params;
+  const query = await searchParams;
   const [products, allLotteries] = await Promise.all([getProducts(), getLotteriesWithRelations()]);
   const product = products.find((item) => item.slug === slug);
   if (!product) notFound();
   const lotteries = allLotteries.filter((lottery) => lottery.product.slug === slug);
-  const open = lotteries.filter((lottery) => ["open", "closing_soon"].includes(lottery.computedStatus));
-  const upcoming = lotteries.filter((lottery) => lottery.computedStatus === "upcoming");
-  const ended = lotteries.filter((lottery) => lottery.computedStatus === "ended");
+  const selectedShop = paramValue(query, "shop");
+  const selectedPrefecture = paramValue(query, "prefecture");
+  const filteredLotteries = lotteries.filter((lottery) => {
+    if (selectedShop && lottery.shop.slug !== selectedShop) return false;
+    if (selectedPrefecture && lottery.prefecture !== selectedPrefecture && lottery.area !== selectedPrefecture) return false;
+    return true;
+  });
+  const filterShops = Array.from(new Map(lotteries.map((lottery) => [lottery.shop.slug, lottery.shop.name])).entries());
+  const filterPrefectures = Array.from(
+    new Map(lotteries.map((lottery) => [lottery.prefecture, lottery.prefecture])).entries()
+  );
+  const open = filteredLotteries.filter((lottery) => ["open", "closing_soon"].includes(lottery.computedStatus));
+  const upcoming = filteredLotteries.filter((lottery) => lottery.computedStatus === "upcoming");
+  const ended = filteredLotteries.filter((lottery) => lottery.computedStatus === "ended");
   const related = products.filter((item) => item.cardGameId === product.cardGameId && item.id !== product.id).slice(0, 3);
 
   return (
@@ -48,13 +66,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="space-y-4">
           <h1 className="text-xl font-black leading-snug md:text-2xl">{product.name}</h1>
           <p className="leading-7 text-slate-700">{product.description}</p>
-          <dl className="grid gap-3 text-sm sm:grid-cols-2">
-            <div><dt className="font-bold text-slate-500">発売日</dt><dd>{formatTokyo(product.releaseDate, "yyyy/MM/dd")}</dd></div>
-            <div><dt className="font-bold text-slate-500">希望小売価格</dt><dd>{formatPrice(product.retailPrice)}</dd></div>
-          </dl>
           <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
         </div>
       </section>
+      <ProductLotteryFilters shops={filterShops} prefectures={filterPrefectures} />
       <section className="space-y-4">
         <h2 className="text-2xl font-black">受付中の抽選</h2>
         <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
