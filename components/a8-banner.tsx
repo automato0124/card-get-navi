@@ -3,11 +3,12 @@
 const A8_CLICK_URL = "https://px.a8.net/svt/ejp?a8mat=4B9VHF+9LWV8Y+5WQC+5YZ75";
 const A8_BANNER_URL = "https://www25.a8.net/svt/bgt?aid=260801187581&wid=001&eno=01&mid=s00000027570001003000&mc=1";
 const A8_TRACKING_URL = "https://www17.a8.net/0.gif?a8mat=4B9VHF+9LWV8Y+5WQC+5YZ75";
+const A8_CLICK_URL_WITH_PARAMS = `${A8_CLICK_URL}&cg_placement=home_banner&cg_shop=a8-banner`;
 
 export function A8Banner() {
   return (
     <aside className="py-2 text-center" aria-label="広告">
-      <a href={A8_CLICK_URL} target="_blank" rel="sponsored nofollow noopener noreferrer" className="mx-auto block w-fit max-w-full">
+      <a href={A8_CLICK_URL_WITH_PARAMS} target="_blank" rel="sponsored nofollow noopener noreferrer" className="mx-auto block w-fit max-w-full">
         <img
           width={300}
           height={250}
