@@ -102,13 +102,15 @@ export function LotteryCard({
           </div>
         </div>
         <div className="grid gap-3.5 border-l border-line pl-5 max-md:border-l-0 max-md:border-t max-md:pt-5 max-md:pl-0">
-          <dl className="text-xs text-slate-700">
-            <div className="px-1 py-1">
-              <dt className="font-bold text-slate-500">締切</dt>
-              <dd className="mt-1 font-black text-[#e60012]">{formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
-            </div>
-          </dl>
-          <p className="px-1 text-base font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p>
+          {recommended ? null : (
+            <dl className="text-xs text-slate-700">
+              <div className="px-1 py-1">
+                <dt className="font-bold text-slate-500">締切</dt>
+                <dd className="mt-1 font-black text-[#e60012]">{formatTokyo(lottery.endAt, "M/d HH:mm")}</dd>
+              </div>
+            </dl>
+          )}
+          <p className="px-1 text-base font-black text-[#e60012]">{recommended ? "数量限定" : remainingTimeLabel(lottery.endAt)}</p>
           <a
             href={ctaDisabled ? undefined : ctaHref}
             aria-disabled={ctaDisabled}
