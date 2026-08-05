@@ -14,7 +14,7 @@ const methodLabel = {
   line: "LINE"
 };
 
-function ctaLabel(lottery: LotteryWithRelations, openLabel = "応募する") {
+function ctaLabel(lottery: LotteryWithRelations, openLabel = "応募する！") {
   if (!lottery.officialApplicationUrl) return "詳細確認中";
   if (lottery.computedStatus === "upcoming") return "応募条件を確認する";
   if (lottery.computedStatus === "ended") return "受付終了";
@@ -41,7 +41,7 @@ export function LotteryCard({
   lottery,
   compact = false,
   titleBy = "product",
-  openCtaLabel = "応募する",
+  openCtaLabel = "応募する！",
   ctaHrefMode = "application",
   showLocation = true,
   showShop = true
