@@ -16,8 +16,8 @@ export function StatusBadge({ status }: { status: LotteryStatus }) {
   const item = config[status];
   const Icon = item.icon;
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold", item.className)}>
-      <Icon className="h-3.5 w-3.5" aria-hidden />
+    <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold", item.className)}>
+      <Icon className="h-3 w-3" aria-hidden />
       {item.label}
     </span>
   );

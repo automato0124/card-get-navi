@@ -55,7 +55,7 @@ export function LotteryCard({
     <article
       className={cn(
         "group relative border-b border-line bg-white transition hover:bg-brand-50/40",
-        compact ? "py-5" : "py-6"
+        compact ? "py-4" : "py-5"
       )}
     >
       <Link href={`/products/${lottery.product.slug}`} className="absolute inset-0 z-0" aria-label={`${lottery.product.name}の詳細を見る`} />
@@ -72,12 +72,12 @@ export function LotteryCard({
               />
             </div>
           ) : null}
-          <div className="min-w-0 space-y-3">
+          <div className="min-w-0 space-y-2.5">
             <div className="flex flex-wrap items-center gap-1.5">
               <StatusBadge status={lottery.computedStatus} />
-              <span className="rounded-full border border-line bg-white px-2.5 py-1 text-[10px] font-bold text-slate-700">{methodLabel[lottery.applicationMethod]}</span>
+              <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-bold text-slate-700">{methodLabel[lottery.applicationMethod]}</span>
             </div>
-            <h3 className="break-words text-base font-black leading-snug text-ink sm:text-lg">
+            <h3 className="break-words text-sm font-black leading-snug text-ink sm:text-base">
               <Link href={titleHref} className="relative z-10 hover:text-brand-700">
                 {title}
               </Link>
@@ -109,14 +109,14 @@ export function LotteryCard({
               </div>
             </dl>
           )}
-          <p className="px-1 text-base font-black text-[#e60012]">{recommended ? "数量限定" : remainingTimeLabel(lottery.endAt)}</p>
+          <p className="px-1 text-sm font-black text-[#e60012]">{recommended ? "数量限定" : remainingTimeLabel(lottery.endAt)}</p>
           <a
             href={ctaDisabled ? undefined : ctaHref}
             aria-disabled={ctaDisabled}
             target={ctaHrefMode === "application" ? "_blank" : undefined}
             rel={ctaHrefMode === "application" ? "sponsored nofollow noopener noreferrer" : undefined}
             className={cn(
-              "relative z-10 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-2xl px-3.5 py-2.5 text-sm font-black transition",
+              "relative z-10 inline-flex min-h-10 items-center justify-center gap-1.5 rounded-2xl px-3 py-2 text-xs font-black transition",
               ctaDisabled
                 ? "cursor-not-allowed bg-slate-200 text-slate-500"
                 : lottery.computedStatus === "upcoming"

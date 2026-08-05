@@ -59,40 +59,40 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
 
   return (
     <main className="container space-y-8 py-10">
-      <nav className="text-sm text-slate-600" aria-label="パンくず">
+      <nav className="text-xs text-slate-600" aria-label="パンくず">
         <Link href="/">トップ</Link> / <span>{product.name}</span>
       </nav>
       <section className={product.imageUrl ? "grid gap-5 rounded-3xl border border-line bg-white p-5 shadow-sm md:grid-cols-[180px_1fr]" : "rounded-3xl border border-line bg-white p-5 shadow-sm"}>
         {product.imageUrl ? (
-          <div className="mx-auto grid w-[70vw] max-w-72 aspect-[4/5] place-items-center rounded-2xl sm:w-64 md:w-full">
-            <Image src={product.imageUrl} alt="" width={224} height={280} className="h-full w-full object-contain p-2 sm:p-3 md:p-5" />
+          <div className="mx-auto grid w-[70vw] max-w-72 place-items-center rounded-2xl sm:w-64 md:w-full">
+            <Image src={product.imageUrl} alt="" width={224} height={280} className="h-auto w-full object-contain md:p-2" />
           </div>
         ) : null}
         <div className="space-y-3">
-          <h1 className="text-lg font-black leading-snug md:text-2xl">{product.name}</h1>
+          <h1 className="text-base font-black leading-snug md:text-xl">{product.name}</h1>
           <p className="text-sm leading-6 text-slate-700 md:text-base md:leading-7">{product.description}</p>
           <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
         </div>
       </section>
       <ProductLotteryFilters shops={filterShops} />
       <section className="space-y-4">
-        <h2 className="text-2xl font-black">受付中の抽選</h2>
+        <h2 className="text-xl font-black">受付中の抽選</h2>
         <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} titleBy="shop" />)}</div>
       </section>
       <section className="space-y-4">
-        <h2 className="text-2xl font-black">近日開始の抽選</h2>
+        <h2 className="text-xl font-black">近日開始の抽選</h2>
         <div className="grid gap-4">{upcoming.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} titleBy="shop" />)}</div>
       </section>
       <details className="rounded-3xl border border-line bg-white p-4">
-        <summary className="cursor-pointer text-xl font-black">終了済みの抽選 {ended.length}件</summary>
+        <summary className="cursor-pointer text-lg font-black">終了済みの抽選 {ended.length}件</summary>
         <div className="mt-4 grid gap-4">{ended.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} titleBy="shop" />)}</div>
       </details>
       {related.length ? (
         <section className="space-y-3">
-          <h2 className="text-2xl font-black">関連商品</h2>
+          <h2 className="text-xl font-black">関連商品</h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {related.map((item) => (
-              <Link key={item.id} href={`/products/${item.slug}`} className="rounded-2xl border border-line bg-white p-4 font-bold transition hover:bg-brand-50">
+              <Link key={item.id} href={`/products/${item.slug}`} className="rounded-2xl border border-line bg-white p-4 text-sm font-bold transition hover:bg-brand-50">
                 {item.name}
               </Link>
             ))}

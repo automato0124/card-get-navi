@@ -24,7 +24,7 @@ export function ProductLotteryFilters({
       <select
         value={searchParams.get(key) ?? ""}
         onChange={(event) => update(key, event.target.value)}
-        className="h-10 w-full min-w-0 rounded-full border border-line bg-white px-3.5 text-sm font-medium text-ink"
+        className="h-9 w-full min-w-0 rounded-full border border-line bg-white px-3 text-xs font-medium text-ink"
       >
         <option value="">すべて</option>
         {options.map(([value, optionLabel]) => (

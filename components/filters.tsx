@@ -27,7 +27,7 @@ export function Filters({ shops, lotteries }: { shops: Shop[]; lotteries: Lotter
       <select
         value={searchParams.get(key) ?? ""}
         onChange={(event) => update(key, event.target.value)}
-        className="h-10 w-full min-w-0 rounded-full border border-line bg-white px-3.5 text-sm font-medium text-ink"
+        className="h-9 w-full min-w-0 rounded-full border border-line bg-white px-3 text-xs font-medium text-ink"
       >
         <option value="">すべて</option>
         {options.map(([value, optionLabel]) => (
@@ -46,7 +46,7 @@ export function Filters({ shops, lotteries }: { shops: Shop[]; lotteries: Lotter
         key={value}
         type="button"
         onClick={() => update("status", active ? "" : value)}
-        className={`min-h-10 rounded-2xl border-2 px-3 text-sm font-black text-white shadow-[2px_2px_0_#17223b] transition hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#17223b] active:translate-y-0 active:shadow-[1px_1px_0_#17223b] ${active ? activeClassName : className}`}
+        className={`min-h-9 rounded-2xl border-2 px-2.5 text-xs font-black text-white shadow-[2px_2px_0_#17223b] transition hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#17223b] active:translate-y-0 active:shadow-[1px_1px_0_#17223b] ${active ? activeClassName : className}`}
         aria-pressed={active}
       >
         {label}

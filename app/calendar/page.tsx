@@ -40,8 +40,8 @@ export default async function CalendarPage() {
       <section className="space-y-4">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="text-sm font-black text-slate-500">{monthLabel}</p>
-            <h1 className="mt-1 text-2xl font-black md:text-3xl">抽選カレンダー</h1>
+            <p className="text-xs font-black text-slate-500">{monthLabel}</p>
+            <h1 className="mt-1 text-xl font-black md:text-2xl">抽選カレンダー</h1>
           </div>
         </div>
         <div className="flex flex-wrap gap-2 text-xs font-black">
@@ -53,7 +53,7 @@ export default async function CalendarPage() {
             <div className="grid grid-cols-7 border-b border-line bg-slate-50 text-xs font-black text-slate-500">
               {["日", "月", "火", "水", "木", "金", "土"].map((day) => <div key={day} className="p-2 text-center">{day}</div>)}
             </div>
-            <div className="grid grid-cols-7 text-sm">
+            <div className="grid grid-cols-7 text-xs">
               {leadingBlanks.map((_, index) => <div key={`blank-${index}`} className="min-h-24 border-r border-b border-line bg-slate-50/60 last:border-r-0" />)}
               {daysWithEvents.map(({ day, key, closing, starts }) => {
                 const hasEvents = closing || starts;
@@ -78,11 +78,11 @@ export default async function CalendarPage() {
         </div>
       </section>
       <section className="space-y-8">
-        <h2 className="text-2xl font-black">日別一覧</h2>
+        <h2 className="text-xl font-black">日別一覧</h2>
         {activeDays.map(({ day, key, lotteries: dayLotteries }) => {
           return (
             <div key={key} id={`day-${key}`} className="scroll-mt-24 border-b border-line pb-8">
-              <h3 className="mb-4 text-xl font-black">{formatTokyo(day.toISOString(), "M月d日")}</h3>
+              <h3 className="mb-4 text-lg font-black">{formatTokyo(day.toISOString(), "M月d日")}</h3>
               <div className="grid gap-4">{dayLotteries.map((lottery) => <LotteryCard key={`${key}-${lottery.id}`} lottery={lottery} compact />)}</div>
             </div>
           );

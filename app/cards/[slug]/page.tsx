@@ -32,22 +32,22 @@ export default async function CardGamePage({ params }: { params: Promise<{ slug:
   const ended = lotteries.filter((lottery) => lottery.computedStatus === "ended");
   return (
     <main className="container space-y-8 py-10">
-      <nav className="text-sm text-slate-600" aria-label="パンくず"><Link href="/">トップ</Link> / <span>{game.name}</span></nav>
+      <nav className="text-xs text-slate-600" aria-label="パンくず"><Link href="/">トップ</Link> / <span>{game.name}</span></nav>
       <section className="space-y-3">
-        <h1 className="text-2xl font-black md:text-3xl">{game.name}</h1>
-        <p className="leading-7 text-slate-700">{game.description}</p>
-        <p className="font-bold text-brand-700">受付中 {open.length}件</p>
+        <h1 className="text-xl font-black md:text-2xl">{game.name}</h1>
+        <p className="text-sm leading-6 text-slate-700">{game.description}</p>
+        <p className="text-sm font-bold text-brand-700">受付中 {open.length}件</p>
       </section>
       <section className="space-y-3">
-        <h2 className="text-2xl font-black">商品一覧</h2>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{gameProducts.map((product) => <Link key={product.id} href={`/products/${product.slug}`} className="rounded-3xl border border-line bg-white p-4 font-bold">{product.name}</Link>)}</div>
+        <h2 className="text-xl font-black">商品一覧</h2>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{gameProducts.map((product) => <Link key={product.id} href={`/products/${product.slug}`} className="rounded-3xl border border-line bg-white p-4 text-sm font-bold">{product.name}</Link>)}</div>
       </section>
       <section className="space-y-3">
-        <h2 className="text-2xl font-black">受付中の抽選</h2>
+        <h2 className="text-xl font-black">受付中の抽選</h2>
         <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
       </section>
       <details className="rounded-3xl border border-line bg-white p-4">
-        <summary className="cursor-pointer text-xl font-black">終了済みの抽選 {ended.length}件</summary>
+        <summary className="cursor-pointer text-lg font-black">終了済みの抽選 {ended.length}件</summary>
         <div className="mt-4 grid gap-4">{ended.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
       </details>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [{ "@type": "Question", name: `${game.name}の抽選はどこで確認できますか？`, acceptedAnswer: { "@type": "Answer", text: "受付中一覧と商品ページで締切順に確認できます。" } }] }) }} />

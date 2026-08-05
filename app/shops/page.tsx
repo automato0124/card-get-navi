@@ -71,12 +71,12 @@ export default async function ShopsPage() {
   });
   return (
     <main className="container space-y-6 py-10">
-      <h1 className="text-2xl font-black md:text-3xl">店舗一覧</h1>
+      <h1 className="text-xl font-black md:text-2xl">店舗一覧</h1>
       <div className="grid gap-3">
         {sortedShops.map((shop) => (
           <Link key={shop.id} href={`/shops/${shop.slug}`} className="rounded-3xl border border-line bg-white p-4 shadow-sm">
-            <h2 className="font-bold">{shop.name}</h2>
-            <p className="mt-2 text-sm text-slate-600">{shop.prefecture} / {shop.isOnline ? "オンライン対応" : "店頭対応"}</p>
+            <h2 className="text-sm font-bold">{shop.name}</h2>
+            <p className="mt-2 text-xs text-slate-600">{shop.prefecture} / {shop.isOnline ? "オンライン対応" : "店頭対応"}</p>
           </Link>
         ))}
       </div>

@@ -31,21 +31,21 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
   const ended = lotteries.filter((lottery) => lottery.computedStatus === "ended");
   return (
     <main className="container space-y-8 py-10">
-      <nav className="text-sm text-slate-600" aria-label="パンくず"><Link href="/">トップ</Link> / <Link href="/shops">店舗一覧</Link> / <span>{shop.name}</span></nav>
+      <nav className="text-xs text-slate-600" aria-label="パンくず"><Link href="/">トップ</Link> / <Link href="/shops">店舗一覧</Link> / <span>{shop.name}</span></nav>
       <section className="space-y-3">
-        <h1 className="text-2xl font-black md:text-3xl">{shop.name}</h1>
+        <h1 className="text-xl font-black md:text-2xl">{shop.name}</h1>
       </section>
       <section className="space-y-3">
-        <h2 className="text-2xl font-black">現在受付中の抽選</h2>
+        <h2 className="text-xl font-black">現在受付中の抽選</h2>
         <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
       </section>
       <details className="rounded-3xl border border-line bg-white p-4">
-        <summary className="cursor-pointer text-xl font-black">過去の抽選 {ended.length}件</summary>
+        <summary className="cursor-pointer text-lg font-black">過去の抽選 {ended.length}件</summary>
         <div className="mt-4 grid gap-4">{ended.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
       </details>
       <section className="rounded-3xl border border-line bg-white p-4">
-        <h2 className="text-xl font-black">応募時によく必要になる条件</h2>
-        <p className="mt-2 text-sm text-slate-700">会員登録、本人確認、店頭受取、購入履歴など。応募前に公式ページで最新条件を確認してください。</p>
+        <h2 className="text-lg font-black">応募時によく必要になる条件</h2>
+        <p className="mt-2 text-xs text-slate-700">会員登録、本人確認、店頭受取、購入履歴など。応募前に公式ページで最新条件を確認してください。</p>
       </section>
     </main>
   );
