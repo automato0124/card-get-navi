@@ -68,10 +68,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
       <div className="container py-8">
         <section id="lotteries" className="space-y-5 scroll-mt-24 border-b border-line pb-8">
           <Filters cardGames={cardGames} shops={shops} lotteries={all} />
+          <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
           <A8Banner />
           {visibleLotteries.length ? (
             <div className="space-y-2">
-              <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
               <div className="border-t border-line">
                 {visibleLotteries.map((lottery) => (
                   <LotteryCard key={lottery.id} lottery={lottery} />
