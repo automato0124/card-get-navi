@@ -9,14 +9,21 @@ import { createMetadata } from "@/lib/seo";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
+const productPageShopPriority = ["oripa-freaks", "amazon"];
+
 function paramValue(params: Record<string, string | string[] | undefined>, key: string) {
   const value = params[key];
   return Array.isArray(value) ? value[0] : value;
 }
 
 function productPageLotteryOrder(a: { shop: { slug: string }; endAt?: string }, b: { shop: { slug: string }; endAt?: string }) {
-  if (a.shop.slug === "oripa-freaks" && b.shop.slug !== "oripa-freaks") return -1;
-  if (b.shop.slug === "oripa-freaks" && a.shop.slug !== "oripa-freaks") return 1;
+  const aPriority = productPageShopPriority.indexOf(a.shop.slug);
+  const bPriority = productPageShopPriority.indexOf(b.shop.slug);
+  if (aPriority !== bPriority) {
+    if (aPriority === -1) return 1;
+    if (bPriority === -1) return -1;
+    return aPriority - bPriority;
+  }
   return (a.endAt || "").localeCompare(b.endAt || "");
 }
 
