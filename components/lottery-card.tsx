@@ -65,6 +65,7 @@ export function LotteryCard({
   const showImage = titleBy === "product" && Boolean(imageUrl);
   const showMeta = (titleBy === "product" && showShop) || showLocation;
   const unknownDeadline = hasUnknownDeadline(lottery);
+  const showDeadline = !recommended;
   return (
     <article
       className={cn(
@@ -110,12 +111,14 @@ export function LotteryCard({
           </div>
         </div>
         <div className="grid gap-3.5 border-l border-line pl-5 max-md:border-l-0 max-md:border-t max-md:pt-5 max-md:pl-0">
-          <dl className="text-xs text-slate-700">
-            <div className="px-1 py-1">
-              <dt className="font-bold text-slate-500">締切</dt>
-              <dd className="mt-1 font-black text-[#e60012]">{deadlineLabel(lottery)}</dd>
-            </div>
-          </dl>
+          {showDeadline ? (
+            <dl className="text-xs text-slate-700">
+              <div className="px-1 py-1">
+                <dt className="font-bold text-slate-500">締切</dt>
+                <dd className="mt-1 font-black text-[#e60012]">{deadlineLabel(lottery)}</dd>
+              </div>
+            </dl>
+          ) : null}
           {recommended ? (
             <p>
               <span className="inline-flex w-fit rounded-full bg-[#e60012] px-2.5 py-1 text-xs font-black leading-none text-white">おすすめ！</span>
