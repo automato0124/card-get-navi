@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import { A8Banner } from "@/components/a8-banner";
 import { Filters } from "@/components/filters";
 import { LotteryCard } from "@/components/lottery-card";
 import { getPublicData } from "@/lib/cms";
@@ -67,6 +68,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
       <div className="container py-8">
         <section id="lotteries" className="space-y-5 scroll-mt-24 border-b border-line pb-8">
           <Filters cardGames={cardGames} shops={shops} lotteries={all} />
+          <A8Banner />
           {visibleLotteries.length ? (
             <div className="space-y-2">
               <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>

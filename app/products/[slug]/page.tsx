@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { A8Banner } from "@/components/a8-banner";
 import { LotteryCard } from "@/components/lottery-card";
 import { ProductLotteryFilters } from "@/components/product-lottery-filters";
 import { getLotteriesWithRelations, getProducts } from "@/lib/cms";
@@ -70,6 +71,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
         </div>
       </section>
       <ProductLotteryFilters shops={filterShops} prefectures={filterPrefectures} />
+      <A8Banner />
       <section className="space-y-4">
         <h2 className="text-2xl font-black">受付中の抽選</h2>
         <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} />)}</div>
