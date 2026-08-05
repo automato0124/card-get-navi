@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin } from "lucide-react";
+import { ExternalLink, MapPin } from "lucide-react";
 import { formatTokyo, remainingTimeLabel } from "@/lib/time";
 import type { LotteryWithRelations } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -116,7 +116,13 @@ export function LotteryCard({
               <dd className="mt-1 font-black text-[#e60012]">{deadlineLabel(lottery)}</dd>
             </div>
           </dl>
-          {recommended ? <p className="px-1 text-sm font-black text-[#e60012]">おすすめ！</p> : !unknownDeadline ? <p className="px-1 text-sm font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p> : null}
+          {recommended ? (
+            <p>
+              <span className="inline-flex w-fit rounded-full bg-[#e60012] px-2.5 py-1 text-xs font-black leading-none text-white">おすすめ！</span>
+            </p>
+          ) : !unknownDeadline ? (
+            <p className="px-1 text-sm font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p>
+          ) : null}
           <a
             href={ctaDisabled ? undefined : ctaHref}
             aria-disabled={ctaDisabled}
@@ -132,6 +138,7 @@ export function LotteryCard({
             )}
           >
             {ctaLabel(lottery, openCtaLabel)}
+            {!ctaDisabled && ctaHrefMode === "application" ? <ExternalLink className="h-3.5 w-3.5" aria-hidden /> : null}
           </a>
         </div>
       </div>
