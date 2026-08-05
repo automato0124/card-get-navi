@@ -15,6 +15,8 @@ export const metadata = createMetadata({
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
+const featuredProductSlugs = ["storm-emeralda"];
+
 function valueOf(params: SearchParams, key: string) {
   const value = params[key];
   return Array.isArray(value) ? value[0] : value;
@@ -44,15 +46,24 @@ function uniqueByProduct(lotteries: LotteryWithRelations[]) {
   });
 }
 
+function homeLotteryOrder(a: LotteryWithRelations, b: LotteryWithRelations) {
+  const aFeatured = featuredProductSlugs.indexOf(a.product.slug);
+  const bFeatured = featuredProductSlugs.indexOf(b.product.slug);
+  if (aFeatured !== bFeatured) {
+    if (aFeatured === -1) return 1;
+    if (bFeatured === -1) return -1;
+    return aFeatured - bFeatured;
+  }
+  const aTime = a.endAt ? parseTokyoDate(a.endAt).getTime() : 0;
+  const bTime = b.endAt ? parseTokyoDate(b.endAt).getTime() : 0;
+  return aTime - bTime;
+}
+
 export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;
   const { shops, lotteries: all } = await getPublicData();
-  const open = uniqueByProduct(all.filter((item) => ["open", "closing_soon"].includes(item.computedStatus)));
-  const filtered = filterLotteries(all, params).sort((a, b) => {
-    const aTime = a.endAt ? parseTokyoDate(a.endAt).getTime() : 0;
-    const bTime = b.endAt ? parseTokyoDate(b.endAt).getTime() : 0;
-    return aTime - bTime;
-  });
+  const open = uniqueByProduct(all.filter((item) => ["open", "closing_soon"].includes(item.computedStatus)).sort(homeLotteryOrder));
+  const filtered = filterLotteries(all, params).sort(homeLotteryOrder);
   const visibleLotteries = uniqueByProduct(filtered.filter((lottery) => lottery.computedStatus !== "ended"));
   const endedLotteries = uniqueByProduct(filtered.filter((lottery) => lottery.computedStatus === "ended"));
 
