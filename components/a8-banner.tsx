@@ -6,8 +6,7 @@ const A8_TRACKING_URL = "https://www17.a8.net/0.gif?a8mat=4B9VHF+9LWV8Y+5WQC+5YZ
 
 export function A8Banner() {
   return (
-    <aside className="space-y-2 py-2 text-center" aria-label="広告">
-      <p className="text-[11px] font-bold leading-5 text-slate-500">PR</p>
+    <aside className="py-2 text-center" aria-label="広告">
       <a href={A8_CLICK_URL} target="_blank" rel="sponsored nofollow noopener noreferrer" className="mx-auto block w-fit max-w-full">
         <img
           width={300}
