@@ -27,14 +27,12 @@ function filterLotteries(lotteries: LotteryWithRelations[], params: SearchParams
     const status = valueOf(params, "status");
     const method = valueOf(params, "method");
     const shop = valueOf(params, "shop");
-    const prefecture = valueOf(params, "prefecture");
     return (
       (!game || lottery.cardGame.slug === game) &&
       (!product || lottery.product.slug === product) &&
       (!status || lottery.computedStatus === status) &&
       (!method || lottery.applicationMethod === method) &&
-      (!shop || lottery.shop.slug === shop) &&
-      (!prefecture || lottery.prefecture === prefecture)
+      (!shop || lottery.shop.slug === shop)
     );
   });
 }

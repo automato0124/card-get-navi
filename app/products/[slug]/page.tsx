@@ -45,18 +45,13 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
   if (!product) notFound();
   const lotteries = allLotteries.filter((lottery) => lottery.product.slug === slug);
   const selectedShop = paramValue(query, "shop");
-  const selectedPrefecture = paramValue(query, "prefecture");
   const filteredLotteries = lotteries
     .filter((lottery) => {
       if (selectedShop && lottery.shop.slug !== selectedShop) return false;
-      if (selectedPrefecture && lottery.prefecture !== selectedPrefecture && lottery.area !== selectedPrefecture) return false;
       return true;
     })
     .sort(productPageLotteryOrder);
   const filterShops = Array.from(new Map(lotteries.map((lottery) => [lottery.shop.slug, lottery.shop.name])).entries());
-  const filterPrefectures = Array.from(
-    new Map(lotteries.map((lottery) => [lottery.prefecture, lottery.prefecture])).entries()
-  );
   const open = filteredLotteries.filter((lottery) => ["open", "closing_soon"].includes(lottery.computedStatus));
   const upcoming = filteredLotteries.filter((lottery) => lottery.computedStatus === "upcoming");
   const ended = filteredLotteries.filter((lottery) => lottery.computedStatus === "ended");
@@ -79,7 +74,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
           <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
         </div>
       </section>
-      <ProductLotteryFilters shops={filterShops} prefectures={filterPrefectures} />
+      <ProductLotteryFilters shops={filterShops} />
       <section className="space-y-4">
         <h2 className="text-2xl font-black">受付中の抽選</h2>
         <div className="grid gap-4">{open.map((lottery) => <LotteryCard key={lottery.id} lottery={lottery} titleBy="shop" />)}</div>
