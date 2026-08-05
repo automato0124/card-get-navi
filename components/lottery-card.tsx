@@ -30,13 +30,15 @@ export function LotteryCard({
   compact = false,
   titleBy = "product",
   openCtaLabel = "応募する",
-  ctaHrefMode = "application"
+  ctaHrefMode = "application",
+  showLocation = true
 }: {
   lottery: LotteryWithRelations;
   compact?: boolean;
   titleBy?: "product" | "shop";
   openCtaLabel?: string;
   ctaHrefMode?: "application" | "product";
+  showLocation?: boolean;
 }) {
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
@@ -85,10 +87,12 @@ export function LotteryCard({
             </h3>
             <p className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-slate-700">
               {titleBy === "product" ? <span>{lottery.shop.name}</span> : null}
-              <span className="inline-flex items-center gap-1 text-slate-600">
-                <MapPin className="h-3.5 w-3.5" aria-hidden />
-                {lottery.prefecture}
-              </span>
+              {showLocation ? (
+                <span className="inline-flex items-center gap-1 text-slate-600">
+                  <MapPin className="h-3.5 w-3.5" aria-hidden />
+                  {lottery.prefecture}
+                </span>
+              ) : null}
             </p>
           </div>
         </div>
