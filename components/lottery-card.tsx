@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { formatTokyo, remainingTimeLabel } from "@/lib/time";
 import type { LotteryWithRelations } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -136,7 +136,6 @@ export function LotteryCard({
             )}
           >
             {ctaLabel(lottery, openCtaLabel)}
-            {!ctaDisabled ? <ExternalLink className="h-3.5 w-3.5" aria-hidden /> : null}
           </a>
         </div>
       </div>
