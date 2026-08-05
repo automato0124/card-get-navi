@@ -6,8 +6,8 @@ import { createMetadata } from "@/lib/seo";
 import { formatTokyo, todayKeyTokyo } from "@/lib/time";
 
 export const metadata: Metadata = createMetadata({
-  title: "発売・締切カレンダー",
-  description: "ポケカの抽選締切、受付開始、商品発売日を月別カレンダーで確認できます。",
+  title: "抽選カレンダー",
+  description: "ポケカの抽選締切、受付開始を月別カレンダーで確認できます。",
   path: "/calendar"
 });
 
@@ -16,7 +16,7 @@ export default async function CalendarPage() {
   const end = endOfMonth(new Date());
   const days: Date[] = [];
   for (let date = start; date <= end; date = addDays(date, 1)) days.push(date);
-  const { products, lotteries } = await getPublicData();
+  const { lotteries } = await getPublicData();
   const todayKey = todayKeyTokyo(new Date());
   const monthLabel = format(start, "yyyy年M月");
   const leadingBlanks = Array.from({ length: getDay(start) });
@@ -24,18 +24,15 @@ export default async function CalendarPage() {
     const key = format(day, "yyyy-MM-dd");
     const closingLotteries = lotteries.filter((lottery) => lottery.endAt && todayKeyTokyo(lottery.endAt) === key);
     const startingLotteries = lotteries.filter((lottery) => lottery.startAt && todayKeyTokyo(lottery.startAt) === key);
-    const dayProducts = products.filter((product) => todayKeyTokyo(product.releaseDate) === key);
     return {
       day,
       key,
       closing: closingLotteries.length,
       starts: startingLotteries.length,
-      releases: dayProducts.length,
-      lotteries: [...closingLotteries, ...startingLotteries.filter((startLottery) => !closingLotteries.some((closingLottery) => closingLottery.id === startLottery.id))],
-      products: dayProducts
+      lotteries: [...closingLotteries, ...startingLotteries.filter((startLottery) => !closingLotteries.some((closingLottery) => closingLottery.id === startLottery.id))]
     };
   });
-  const activeDays = daysWithEvents.filter((day) => day.closing || day.starts || day.releases);
+  const activeDays = daysWithEvents.filter((day) => day.closing || day.starts);
   const trailingBlanks = Array.from({ length: (7 - ((leadingBlanks.length + days.length) % 7)) % 7 });
 
   return (
@@ -44,13 +41,12 @@ export default async function CalendarPage() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm font-black text-slate-500">{monthLabel}</p>
-            <h1 className="mt-1 text-2xl font-black md:text-3xl">発売カレンダー</h1>
+            <h1 className="mt-1 text-2xl font-black md:text-3xl">抽選カレンダー</h1>
           </div>
         </div>
         <div className="flex flex-wrap gap-2 text-xs font-black">
           <span className="rounded-full bg-red-50 px-2.5 py-1 text-red-700">締切</span>
           <span className="rounded-full bg-yellow-50 px-2.5 py-1 text-yellow-700">開始</span>
-          <span className="rounded-full bg-violet-50 px-2.5 py-1 text-violet-700">発売</span>
         </div>
         <div className="overflow-x-auto rounded-2xl border border-line bg-white shadow-sm [-webkit-overflow-scrolling:touch]">
           <div className="min-w-[620px] md:min-w-0">
@@ -59,8 +55,8 @@ export default async function CalendarPage() {
             </div>
             <div className="grid grid-cols-7 text-sm">
               {leadingBlanks.map((_, index) => <div key={`blank-${index}`} className="min-h-24 border-r border-b border-line bg-slate-50/60 last:border-r-0" />)}
-              {daysWithEvents.map(({ day, key, closing, starts, releases }) => {
-                const hasEvents = closing || starts || releases;
+              {daysWithEvents.map(({ day, key, closing, starts }) => {
+                const hasEvents = closing || starts;
                 return (
                   <a
                     key={key}
@@ -72,7 +68,6 @@ export default async function CalendarPage() {
                     <div className="mt-2 space-y-1 text-[11px] font-black leading-tight">
                       {closing ? <p className="rounded-full bg-red-50 px-1.5 text-red-700">締切 {closing}</p> : null}
                       {starts ? <p className="rounded-full bg-yellow-50 px-1.5 text-yellow-700">開始 {starts}</p> : null}
-                      {releases ? <p className="rounded-full bg-violet-50 px-1.5 text-violet-700">発売 {releases}</p> : null}
                     </div>
                   </a>
                 );
@@ -84,21 +79,10 @@ export default async function CalendarPage() {
       </section>
       <section className="space-y-8">
         <h2 className="text-2xl font-black">日別一覧</h2>
-        {activeDays.map(({ day, key, lotteries: dayLotteries, products: dayProducts }) => {
+        {activeDays.map(({ day, key, lotteries: dayLotteries }) => {
           return (
             <div key={key} id={`day-${key}`} className="scroll-mt-24 border-b border-line pb-8">
               <h3 className="mb-4 text-xl font-black">{formatTokyo(day.toISOString(), "M月d日")}</h3>
-              {dayProducts.length ? (
-                <div className="mb-5 space-y-3">
-                  {dayProducts.map((product) => (
-                    <a key={`${key}-${product.id}`} href={`/products/${product.slug}`} className="block rounded-2xl border border-line bg-white p-4 transition hover:bg-brand-50">
-                      <p className="text-xs font-black text-violet-700">発売予定</p>
-                      <p className="mt-1 text-lg font-black text-ink">{product.name}</p>
-                      <p className="mt-1 text-sm font-bold text-slate-600">発売日: {formatTokyo(product.releaseDate, "yyyy/MM/dd")}</p>
-                    </a>
-                  ))}
-                </div>
-              ) : null}
               <div className="grid gap-4">{dayLotteries.map((lottery) => <LotteryCard key={`${key}-${lottery.id}`} lottery={lottery} compact />)}</div>
             </div>
           );
