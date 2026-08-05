@@ -29,16 +29,20 @@ export function LotteryCard({
   lottery,
   compact = false,
   titleBy = "product",
-  openCtaLabel = "応募する"
+  openCtaLabel = "応募する",
+  ctaHrefMode = "application"
 }: {
   lottery: LotteryWithRelations;
   compact?: boolean;
   titleBy?: "product" | "shop";
   openCtaLabel?: string;
+  ctaHrefMode?: "application" | "product";
 }) {
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
   const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
+  const ctaHref = ctaHrefMode === "product" ? `/products/${lottery.product.slug}` : lottery.officialApplicationUrl;
+  const ctaDisabled = ctaHrefMode === "application" && disabled;
   const recommended = titleBy === "shop" && isRecommendedShop(lottery);
   const imageUrl = lottery.product.imageUrl;
   const showImage = titleBy === "product" && Boolean(imageUrl);
@@ -97,13 +101,13 @@ export function LotteryCard({
           </dl>
           {recommended ? null : <p className="px-1 text-sm font-black text-[#e60012]">{remainingTimeLabel(lottery.endAt)}</p>}
           <a
-            href={disabled ? undefined : lottery.officialApplicationUrl}
-            aria-disabled={disabled}
-            target="_blank"
-            rel="sponsored nofollow noopener noreferrer"
+            href={ctaDisabled ? undefined : ctaHref}
+            aria-disabled={ctaDisabled}
+            target={ctaHrefMode === "application" ? "_blank" : undefined}
+            rel={ctaHrefMode === "application" ? "sponsored nofollow noopener noreferrer" : undefined}
             className={cn(
               "relative z-10 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-2xl px-3.5 py-2.5 text-sm font-black transition",
-              disabled
+              ctaDisabled
                 ? "cursor-not-allowed bg-slate-200 text-slate-500"
                 : lottery.computedStatus === "upcoming"
                   ? "border-2 border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -111,7 +115,7 @@ export function LotteryCard({
             )}
           >
             {ctaLabel(lottery, openCtaLabel)}
-            {!disabled ? <ExternalLink className="h-3.5 w-3.5" aria-hidden /> : null}
+            {!ctaDisabled ? <ExternalLink className="h-3.5 w-3.5" aria-hidden /> : null}
           </a>
         </div>
       </div>
