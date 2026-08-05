@@ -831,6 +831,58 @@
       "isPublished": true
     },
     {
+      "productSlug": "storm-emeralda",
+      "shopSlug": "amazon",
+      "title": "ポケモンカードゲーム MEGA 拡張パック「ストームエメラルダ」 Amazon 招待販売",
+      "applicationMethod": "online",
+      "startAt": "",
+      "endAt": "2099-12-31T23:59:00+09:00",
+      "applyUrl": "https://link.amazon/B0bW2Rk9Y",
+      "prefecture": "全国",
+      "area": "全国",
+      "isOnline": true,
+      "isPublished": true
+    },
+    {
+      "productSlug": "white-flare",
+      "shopSlug": "amazon",
+      "title": "ポケモンカードゲーム スカーレット&バイオレット 拡張パック「ホワイトフレア」 Amazon 招待販売",
+      "applicationMethod": "online",
+      "startAt": "",
+      "endAt": "2099-12-31T23:59:00+09:00",
+      "applyUrl": "https://link.amazon/B07mPuraw",
+      "prefecture": "全国",
+      "area": "全国",
+      "isOnline": true,
+      "isPublished": true
+    },
+    {
+      "productSlug": "black-bolt",
+      "shopSlug": "amazon",
+      "title": "ポケモンカードゲーム スカーレット&バイオレット 拡張パック「ブラックボルト」 Amazon 招待販売",
+      "applicationMethod": "online",
+      "startAt": "",
+      "endAt": "2099-12-31T23:59:00+09:00",
+      "applyUrl": "https://link.amazon/B06efZtyt",
+      "prefecture": "全国",
+      "area": "全国",
+      "isOnline": true,
+      "isPublished": true
+    },
+    {
+      "productSlug": "mega-symphonia",
+      "shopSlug": "amazon",
+      "title": "ポケモンカードゲーム MEGA 拡張パック「メガシンフォニア」 Amazon 招待販売",
+      "applicationMethod": "online",
+      "startAt": "",
+      "endAt": "2099-12-31T23:59:00+09:00",
+      "applyUrl": "https://link.amazon/B0hCiWEXQ",
+      "prefecture": "全国",
+      "area": "全国",
+      "isOnline": true,
+      "isPublished": true
+    },
+    {
       "productSlug": "30th-celebration-pack",
       "shopSlug": "oripa-freaks",
       "title": "ポケモンカードゲーム MEGA 拡張パック「30th CELEBRATION」 オリパフリークス PR",

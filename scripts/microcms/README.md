@@ -41,6 +41,7 @@ python3 scripts/microcms/microcms_bulk.py delete --yes
 - URLはMarkdownリンク形式でも通常URLに直します
 - `utm_source=chatgpt.com` は削除します
 - `applicationMethod` はmicroCMSのセレクト型に合わせて配列へ変換します
+- `lotteries` の `startAt` は現在のCMSでは使わないためPOSTしません
 - `products` に含まれる `releaseDate` や `retailPrice` は、現在の表示では使わないためPOSTしません
 - `lotteries` に含まれる `requirements`, `notes`, `sourceUrl` は、現在の表示では使わないためPOSTしません
 

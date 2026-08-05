@@ -149,7 +149,6 @@ def lottery_body(lottery, product_id, shop_id):
         "shop": shop_id,
         "title": lottery.get("title"),
         "applicationMethod": method,
-        "startAt": lottery.get("startAt"),
         "endAt": lottery.get("endAt"),
         "applyUrl": clean_url(lottery.get("applyUrl")),
         "isPublished": lottery.get("isPublished", True),
