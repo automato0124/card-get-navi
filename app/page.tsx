@@ -16,6 +16,7 @@ export const metadata = createMetadata({
 type SearchParams = Record<string, string | string[] | undefined>;
 
 const featuredProductSlugs = ["storm-emeralda"];
+const affiliateShopSlugs = ["amazon", "oripa-freaks"];
 
 function valueOf(params: SearchParams, key: string) {
   const value = params[key];
@@ -46,6 +47,10 @@ function uniqueByProduct(lotteries: LotteryWithRelations[]) {
   });
 }
 
+function isAffiliateLottery(lottery: LotteryWithRelations) {
+  return affiliateShopSlugs.includes(lottery.shop.slug);
+}
+
 function homeLotteryOrder(a: LotteryWithRelations, b: LotteryWithRelations) {
   const aFeatured = featuredProductSlugs.indexOf(a.product.slug);
   const bFeatured = featuredProductSlugs.indexOf(b.product.slug);
@@ -54,6 +59,7 @@ function homeLotteryOrder(a: LotteryWithRelations, b: LotteryWithRelations) {
     if (bFeatured === -1) return -1;
     return aFeatured - bFeatured;
   }
+  if (isAffiliateLottery(a) !== isAffiliateLottery(b)) return isAffiliateLottery(a) ? 1 : -1;
   const aTime = a.endAt ? parseTokyoDate(a.endAt).getTime() : 0;
   const bTime = b.endAt ? parseTokyoDate(b.endAt).getTime() : 0;
   return aTime - bTime;
