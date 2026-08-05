@@ -10,9 +10,7 @@ import type { LotteryWithRelations } from "@/lib/types";
 
 export const metadata = createMetadata({
   description: "ポケカの抽選販売、予約、再販情報を締切順に確認できます。応募条件と公式応募ページをまとめてチェックできます。",
-  path: "/",
-  imageUrl: absoluteUrl("/logo-cardgetnavi-pokeca.png"),
-  imageAlt: "カードゲットナビ"
+  path: "/"
 });
 
 type SearchParams = Record<string, string | string[] | undefined>;
