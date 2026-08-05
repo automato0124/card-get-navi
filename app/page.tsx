@@ -39,17 +39,26 @@ function filterLotteries(lotteries: LotteryWithRelations[], params: SearchParams
   });
 }
 
+function uniqueByProduct(lotteries: LotteryWithRelations[]) {
+  const seen = new Set<string>();
+  return lotteries.filter((lottery) => {
+    if (seen.has(lottery.product.slug)) return false;
+    seen.add(lottery.product.slug);
+    return true;
+  });
+}
+
 export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;
   const { cardGames, shops, lotteries: all } = await getPublicData();
-  const open = all.filter((item) => ["open", "closing_soon"].includes(item.computedStatus));
+  const open = uniqueByProduct(all.filter((item) => ["open", "closing_soon"].includes(item.computedStatus)));
   const filtered = filterLotteries(all, params).sort((a, b) => {
     const aTime = a.endAt ? parseTokyoDate(a.endAt).getTime() : 0;
     const bTime = b.endAt ? parseTokyoDate(b.endAt).getTime() : 0;
     return aTime - bTime;
   });
-  const visibleLotteries = filtered.filter((lottery) => lottery.computedStatus !== "ended");
-  const endedLotteries = filtered.filter((lottery) => lottery.computedStatus === "ended");
+  const visibleLotteries = uniqueByProduct(filtered.filter((lottery) => lottery.computedStatus !== "ended"));
+  const endedLotteries = uniqueByProduct(filtered.filter((lottery) => lottery.computedStatus === "ended"));
 
   const structuredData = {
     "@context": "https://schema.org",
