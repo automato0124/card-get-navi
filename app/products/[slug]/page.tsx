@@ -64,13 +64,13 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
       </nav>
       <section className={product.imageUrl ? "grid gap-5 rounded-3xl border border-line bg-white p-5 shadow-sm md:grid-cols-[180px_1fr]" : "rounded-3xl border border-line bg-white p-5 shadow-sm"}>
         {product.imageUrl ? (
-          <div className="mx-auto grid w-48 max-w-[70vw] aspect-[4/5] place-items-center rounded-2xl sm:w-56 md:w-full">
+          <div className="mx-auto grid w-[70vw] max-w-72 aspect-[4/5] place-items-center rounded-2xl sm:w-64 md:w-full">
             <Image src={product.imageUrl} alt="" width={224} height={280} className="h-full w-full object-contain p-2 sm:p-3 md:p-5" />
           </div>
         ) : null}
-        <div className="space-y-4">
-          <h1 className="text-xl font-black leading-snug md:text-2xl">{product.name}</h1>
-          <p className="leading-7 text-slate-700">{product.description}</p>
+        <div className="space-y-3">
+          <h1 className="text-lg font-black leading-snug md:text-2xl">{product.name}</h1>
+          <p className="text-sm leading-6 text-slate-700 md:text-base md:leading-7">{product.description}</p>
           <p className="text-[11px] font-bold leading-5 text-slate-500">※PR・広告を含む場合があります。</p>
         </div>
       </section>
