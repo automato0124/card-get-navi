@@ -57,7 +57,8 @@ export function LotteryCard({
   openCtaLabel = "応募する！",
   ctaHrefMode = "application",
   showLocation = true,
-  showShop = true
+  showShop = true,
+  showRecommended = true
 }: {
   lottery: LotteryWithRelations;
   compact?: boolean;
@@ -66,12 +67,13 @@ export function LotteryCard({
   ctaHrefMode?: "application" | "product";
   showLocation?: boolean;
   showShop?: boolean;
+  showRecommended?: boolean;
 }) {
   const disabled = lottery.computedStatus === "ended" || !lottery.officialApplicationUrl;
   const title = titleBy === "shop" ? lottery.shop.name : lottery.product.name;
   const titleHref = titleBy === "shop" ? `/shops/${lottery.shop.slug}` : `/products/${lottery.product.slug}`;
   const ctaDisabled = ctaHrefMode === "application" && disabled;
-  const recommended = isRecommendedShop(lottery);
+  const recommended = showRecommended && isRecommendedShop(lottery);
   const ctaHref = ctaHrefMode === "product" ? `/products/${lottery.product.slug}` : applicationHref(lottery, lottery.officialApplicationUrl);
   const imageUrl = lottery.product.imageUrl;
   const showImage = titleBy === "product" && Boolean(imageUrl);
